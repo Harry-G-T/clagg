@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f3d2e">
+<title>Clagg Scorer</title>
+<style>
+  :root{
+    --felt:#0f3d2e;
+    --felt-lo:#0a2c20;
+    --felt-hi:#175a43;
+    --cream:#f4efe3;
+    --gold:#d9b06a;
+    --red:#c0392b;
+    --line:rgba(244,239,227,.16);
+    --good:#5fb98a;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(120% 90% at 50% -10%, var(--felt-hi), transparent 60%),
+      var(--felt);
+    color:var(--cream);
+    font-family:"Georgia","Times New Roman",serif;
+    min-height:100dvh;
+    padding:14px 10px 90px;
+    overflow-x:auto;
+  }
+  header{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:14px;min-height:40px;}
+  h1{
+    font-size:26px;margin:0;letter-spacing:.5px;font-weight:700;
+    display:inline-flex;align-items:baseline;gap:8px;
+  }
+  h1 .suit{font-size:22px;}
+  h1 .suit .blk{color:#1a1a1a;text-shadow:0 1px 0 rgba(255,255,255,.15);}
+  h1 .suit .red{color:var(--red);}
+  h1 .ver{font-size:12px;font-weight:400;color:rgba(244,239,227,.4);letter-spacing:1px;}
+  .settings-btn{
+    position:absolute;right:0;top:50%;transform:translateY(-50%);
+    background:none;border:1px solid var(--line);color:var(--cream);
+    font-family:inherit;font-size:13px;border-radius:8px;padding:6px 11px;
+  }
+  /* Table */
+  .board{
+    width:max-content;max-width:100%;margin:0 auto;border-collapse:collapse;
+    background:rgba(0,0,0,.14);border-radius:12px;overflow:hidden;
+  }
+  .board th,.board td{padding:10px 3px;text-align:center;border-right:1px solid rgba(244,239,227,.10);}
+  .board th:last-child,.board td:last-child{border-right:none;}
+  .board thead th{
+    background:var(--felt-lo);font-weight:700;font-size:14px;
+    border-bottom:2px solid var(--gold);padding:10px 3px;
+  }
+  .board tbody td{border-bottom:1px solid rgba(244,239,227,.08);}
+  .board thead th:first-child{text-align:left;padding-left:8px;width:70px;font-size:12px;color:var(--gold);}
+  .cell{display:flex;flex-direction:column;gap:5px;align-items:center;width:150px;margin:0 auto;}
+  .cell .inputs{display:flex;gap:2px;align-items:center;border-radius:9px;padding:2px;justify-content:center;}
+  .cell .inputs.made{background:rgba(95,185,138,.28);}
+  .cell .inputs.missed{background:rgba(192,57,43,.28);}
+  .cell input{
+    width:46px;background:rgba(244,239,227,.06);border:1px solid var(--line);
+    color:var(--cream);font-family:inherit;font-size:22px;font-weight:700;text-align:center;
+    border-radius:8px;padding:8px 0;
+  }
+  .cell input:focus{outline:none;border-color:var(--gold);background:rgba(217,176,106,.12);}
+  .cell input::placeholder{color:rgba(244,239,227,.28);font-weight:400;font-size:15px;}
+  .cell input.over{border-color:var(--red);background:rgba(192,57,43,.28);color:#fff;}
+  .cell input.over:focus{border-color:var(--red);background:rgba(192,57,43,.35);}
+  .runtot{
+    width:46px;font-size:20px;font-weight:700;text-align:center;
+    background:rgba(217,176,106,.08);border:1px solid var(--line);color:var(--gold);
+    border-radius:8px;padding:8px 0;font-family:inherit;
+  }
+  .runtot:focus{outline:none;border-color:var(--gold);background:rgba(217,176,106,.18);}
+  .runtot::placeholder{color:rgba(217,176,106,.35);font-weight:400;}
+  .runtot.override{
+    background:var(--gold);color:var(--felt-lo);border-color:var(--gold);
+    border-width:2px;box-shadow:0 0 0 2px rgba(217,176,106,.35);
+  }
+  .runtot.override:focus{background:var(--gold);color:var(--felt-lo);}
+  .scorewrap{position:relative;display:inline-flex;}
+  .scorewrap.edited::after{
+    content:"edit";position:absolute;top:-7px;right:-6px;
+    background:var(--gold);color:var(--felt-lo);font-size:8px;font-weight:700;
+    letter-spacing:.3px;padding:1px 4px;border-radius:6px;text-transform:uppercase;
+    pointer-events:none;
+  }
+  .runtot.miss{color:rgba(244,239,227,.6);}
+  tbody tr:nth-child(even) td{background:rgba(0,0,0,.16);}
+  tbody tr.active td{background:rgba(217,176,106,.14);}
+  /* round number + label */
+  .rndcell{text-align:left;padding-left:8px;}
+  .rndtop{display:flex;align-items:center;gap:6px;}
+  .rndnum{color:var(--gold);font-weight:700;font-size:18px;}
+  .delcell{padding:6px 8px 6px 4px;}
+  .delrow{
+    background:transparent;border:1px solid var(--red);color:var(--red);
+    font-size:12px;font-weight:700;font-family:inherit;padding:7px 10px;
+    border-radius:7px;white-space:nowrap;
+  }
+  .delrow:active{background:var(--red);color:#fff;}
+  .rndlabel{
+    display:block;width:70px;margin-top:4px;background:rgba(244,239,227,.06);
+    border:1px solid var(--line);color:var(--cream);font-family:inherit;
+    font-size:12px;text-align:center;border-radius:6px;padding:4px 2px;
+  }
+  .rndlabel:focus{outline:none;border-color:var(--gold);}
+  .rndlabel::placeholder{color:rgba(244,239,227,.3);}
+  .rndtricks{
+    color:var(--gold);font-weight:700;font-size:20px;line-height:1.2;
+    white-space:nowrap;text-align:center;
+  }
+  .trkcell{text-align:center;padding:6px 4px;}
+  .trkhead{font-size:12px;color:var(--gold);width:52px;}
+  .trkinput{
+    width:44px;background:rgba(217,176,106,.12);border:1px solid var(--red);
+    color:var(--gold);font-family:inherit;font-weight:700;font-size:18px;
+    text-align:center;border-radius:7px;padding:6px 0;
+  }
+  .trkinput:focus{outline:none;border-color:var(--gold);background:rgba(217,176,106,.22);}
+  .trkinput::placeholder{color:rgba(192,57,43,.7);font-weight:400;}
+  /* Check column */
+  .chkhead{font-size:12px;color:var(--gold);line-height:1.2;width:58px;}
+  .chkcell{padding:6px 6px;}
+  .chkbox{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:40px;height:38px;font-size:20px;font-weight:700;color:var(--cream);
+    border:1.5px solid var(--line);border-radius:9px;padding:0 8px;
+  }
+  .chkbox.bad{color:#fff;background:var(--red);border-color:var(--red);}
+  .chkbox.ok{color:#fff;background:var(--good);border-color:var(--good);}
+  /* Totals row */
+  tfoot td{
+    background:var(--felt-lo);border-top:2px solid var(--gold);
+    font-size:26px;font-weight:700;padding:14px 3px;
+  }
+  tfoot td:first-child{font-size:12px;color:var(--gold);text-align:left;padding-left:8px;}
+  .lead{color:var(--gold);}
+  /* Player header edit */
+  .pname{background:none;border:none;color:var(--gold);font-family:inherit;
+    font-size:18px;font-weight:700;text-align:center;width:150px;max-width:150px;padding:2px;
+    box-sizing:border-box;}
+  .pname:focus{outline:none;border-bottom:1px solid var(--gold);color:var(--cream);}
+  .subhead{display:flex;gap:2px;justify-content:center;margin-top:3px;}
+  .subhead span{
+    width:46px;font-size:10px;font-weight:400;letter-spacing:.5px;
+    color:rgba(244,239,227,.5);text-transform:uppercase;
+  }
+  /* Controls */
+  .bar{
+    position:fixed;left:0;right:0;bottom:0;padding:12px;
+    background:linear-gradient(transparent,var(--felt-lo) 30%);
+    display:flex;gap:10px;justify-content:center;
+  }
+  .bar button{
+    flex:1;max-width:140px;font-family:inherit;font-size:15px;font-weight:700;
+    border-radius:10px;padding:13px 8px;border:none;
+  }
+  .add{background:var(--gold);color:var(--felt-lo);}
+  .add.down{background:var(--felt-hi);color:var(--cream);border:1px solid var(--gold);}
+  .add.bonus{background:var(--red);color:#fff;}
+  /* Settings sheet */
+  .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:10;}
+  .sheet-bg.open{display:block;}
+  .sheet{
+    position:fixed;left:0;right:0;bottom:0;background:var(--felt-hi);
+    border-radius:16px 16px 0 0;padding:20px 18px 28px;transform:translateY(100%);
+    transition:transform .25s;z-index:11;max-height:85dvh;overflow:auto;
+  }
+  .sheet.open{transform:translateY(0);}
+  .sheet h2{margin:0 0 4px;font-size:19px;}
+  .sheet p{margin:0 0 16px;font-size:13px;color:rgba(244,239,227,.6);}
+  .field{display:flex;justify-content:space-between;align-items:center;
+    padding:12px 0;border-bottom:1px solid var(--line);}
+  .field label{font-size:15px;}
+  .field .sub{font-size:12px;color:rgba(244,239,227,.5);display:block;margin-top:2px;}
+  .field input{width:64px;background:rgba(0,0,0,.2);border:1px solid var(--line);
+    color:var(--cream);font-family:inherit;font-size:17px;text-align:center;
+    border-radius:8px;padding:8px;}
+  .players-cfg{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap;}
+  .players-cfg button{flex:1;min-width:44px;padding:12px;border-radius:10px;border:1px solid var(--line);
+    background:transparent;color:var(--cream);font-family:inherit;font-size:16px;font-weight:700;}
+  .players-cfg button.sel{background:var(--gold);color:var(--felt-lo);border-color:var(--gold);}
+  .sheet .close{width:100%;margin-top:18px;background:var(--gold);color:var(--felt-lo);
+    border:none;border-radius:10px;padding:14px;font-family:inherit;font-size:16px;font-weight:700;}
+  .danger{width:100%;margin-top:10px;background:transparent;color:var(--red);
+    border:1px solid var(--red);border-radius:10px;padding:12px;font-family:inherit;font-size:14px;}
+  .hint{font-size:12px;color:rgba(244,239,227,.55);text-align:center;margin:8px 0 0;line-height:1.5;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Clagg <span class="suit"><span class="blk">&spades;</span><span class="red">&hearts;</span><span class="blk">&clubs;</span><span class="red">&diams;</span></span> <span class="ver">v16</span></h1>
+  <button class="settings-btn" onclick="openSheet()">&#9881; Settings</button>
+</header>
+
+<table class="board">
+  <thead><tr id="head-row"></tr></thead>
+  <tbody id="rows"></tbody>
+  <tfoot><tr id="total-row"></tr></tfoot>
+</table>
+
+<div class="bar">
+  <button class="add up" onclick="addRound('up')">Round &uarr;</button>
+  <button class="add down" onclick="addRound('down')">Round &darr;</button>
+  <button class="add bonus" onclick="addRound('bonus')">&#9733; Bonus</button>
+</div>
+
+<!-- Settings -->
+<div class="sheet-bg" id="sheet-bg" onclick="closeSheet(event)">
+  <div class="sheet" id="sheet" onclick="event.stopPropagation()">
+    <h2>Settings</h2>
+    <p>Change scoring or players. Saved on this phone.</p>
+
+    <div class="field">
+      <label>Points for making bid<span class="sub">exact bid = this bonus</span></label>
+      <input type="number" id="cfg-bonus" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label>Points per trick<span class="sub">only if you made your bid</span></label>
+      <input type="number" id="cfg-pertrick" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label>Points if you miss<span class="sub">usually 0</span></label>
+      <input type="number" id="cfg-miss" inputmode="numeric">
+    </div>
+
+    <label style="display:block;margin-top:16px;font-size:15px;">Players</label>
+    <div class="players-cfg" id="players-cfg"></div>
+
+    <button class="close" onclick="applySettings()">Done</button>
+    <button class="danger" onclick="resetAll()">Clear all scores</button>
+  </div>
+</div>
+
+<script>
+const KEY = "clagg-scorer-v1";
+let state;
+
+const defaults = () => ({
+  bonus: 10, perTrick: 3, miss: 0,
+  players: ["P1","P2","P3","P4","P5","P6"],
+  rounds: [ newRound(6,"up") ]
+});
+function newRound(n,type){ return {type:type||"up", label:"", tricks:"", cells:Array.from({length:n},()=>({bid:"",won:"",override:""}))}; }
+
+// Compute tricks for every round from its type + position in the sequence.
+// up = previous+1 (first up round = 1), down = previous-1.
+// bonus = its manually-entered tricks (or null if not set); bonus does NOT change the running count.
+function computeAllTricks(){
+  let last=0;
+  return state.rounds.map(r=>{
+    if(r.type==="bonus"){
+      return (r.tricks!=="" && r.tricks!=null && !isNaN(+r.tricks)) ? (+r.tricks) : null;
+    }
+    if(r.type==="down"){ last = last-1; }
+    else { last = last+1; } // up (or default)
+    if(last<1) last=1;
+    return last;
+  });
+}
+
+function load(){
+  try{ const s = localStorage.getItem(KEY); state = s?JSON.parse(s):defaults(); }
+  catch(e){ state = defaults(); }
+  if(!state.rounds || !state.rounds.length) state.rounds=[newRound(state.players.length,"up")];
+  // migrate older formats -> {type,label,cells}
+  state.rounds = state.rounds.map(r=>{
+    if(Array.isArray(r)) return {type:"up", label:"", tricks:"", cells:r.map(c=>({bid:c.bid||"",won:c.won||"",override:""}))};
+    return {
+      type: r.type || "up",
+      label: r.label || "",
+      tricks: r.tricks!=null ? r.tricks : "",
+      cells: (r.cells||[]).map(c=>({bid:c.bid||"",won:c.won||"",override:c.override||""}))
+    };
+  });
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+// scoring for one cell (auto). Returns null if incomplete.
+function autoScore(c){
+  if(c.bid===""||c.won==="") return null;
+  const bid=+c.bid, won=+c.won;
+  if(bid===won) return state.bonus + won*state.perTrick;
+  return state.miss;
+}
+// effective per-cell score: override wins if set to a complete number
+function cellScore(c){
+  if(c.override!=="" && c.override!=="-" && !isNaN(+c.override)){
+    return {val:+c.override, over:true, has:true};
+  }
+  const a=autoScore(c);
+  return {val:a===null?0:a, over:false, has:a!==null};
+}
+
+function render(){
+  // remember what was focused so a full re-render doesn't drop the caret
+  const _act = document.activeElement;
+  const _focusId = (_act && _act.id && _act.id.startsWith("i-")) ? _act.id : null;
+  const _caret = _focusId ? _act.selectionStart : null;
+
+  const n = state.players.length;
+  const head = document.getElementById("head-row");
+  head.innerHTML = "<th>Round</th><th class='trkhead'>Tricks</th>" + state.players.map((p,i)=>
+    `<th><input class="pname" value="${escapeHtml(p)}" onchange="renameP(${i},this.value)"><div class="subhead"><span>bid</span><span>won</span><span>score</span></div></th>`).join("")
+    + "<th class='chkhead'>Total<br>bids</th><th class='chkhead'>Total<br>won</th><th></th>";
+
+  const running = Array(n).fill(0);
+  const trickList = computeAllTricks();
+  const rows = document.getElementById("rows");
+  rows.innerHTML = "";
+  state.rounds.forEach((round,ri)=>{
+    const tr = document.createElement("tr");
+    if(ri===state.rounds.length-1) tr.className="active";
+    const t = trickList[ri]; // computed; for bonus = manual value or null
+    const trkCell = round.type==="bonus"
+      ? `<input id="i-${ri}-trk" class="trkinput" inputmode="text" placeholder="?" value="${escapeHtml(round.tricks)}"
+                title="Tricks this bonus round" oninput="updTricks(${ri},this.value)">`
+      : `<div class="rndtricks">${t}</div>`;
+    const roundCol = round.type==="bonus"
+      ? `<span class="rndnum">${ri+1}</span>
+         <input class="rndlabel" placeholder="type?" value="${escapeHtml(round.label)}"
+                onchange="updLabel(${ri},this.value)">`
+      : `<span class="rndnum">${ri+1}</span>`;
+    let html = `<td class="rndcell">
+      ${roundCol}
+    </td>
+    <td class="trkcell">
+      ${trkCell}
+    </td>`;
+    let bidSum=0, wonSum=0, anyBid=false, anyWon=false;
+    round.cells.forEach((c,pi)=>{
+      const sc = cellScore(c);
+      if(sc.has) running[pi]+=sc.val;
+      if(c.bid!==""){ bidSum+=(+c.bid); anyBid=true; }
+      if(c.won!==""){ wonSum+=(+c.won); anyWon=true; }
+      let cls=""; if(sc.over) cls="override"; else if(sc.has && sc.val<0) cls="miss";
+      // if an override string is present (even mid-typing like "-"), show it raw; else show computed
+      const hasRawOverride = c.override!=="";
+      if(hasRawOverride) cls = "override";
+      const roundTxt = hasRawOverride ? c.override : (sc.has ? sc.val : "");
+      // flag a bid/won that exceeds the round's tricks (t is null for bonus = no cap)
+      const bidOver = t!==null && c.bid!=="" && (+c.bid) > t;
+      const wonOver = t!==null && c.won!=="" && (+c.won) > t;
+      // made-bid tint: both entered, no manual override -> green if bid==won, red if not
+      let rowTint="";
+      if(!hasRawOverride && c.bid!=="" && c.won!==""){ rowTint = (+c.bid===+c.won) ? "made" : "missed"; }
+      html += `<td><div class="cell">
+        <div class="inputs ${rowTint}">
+          <input id="i-${ri}-${pi}-bid" class="${bidOver?'over':''}" inputmode="text" placeholder="" value="${c.bid}" oninput="upd(${ri},${pi},'bid',this.value)">
+          <input id="i-${ri}-${pi}-won" class="${wonOver?'over':''}" inputmode="text" placeholder="" value="${c.won}" oninput="upd(${ri},${pi},'won',this.value)">
+          <span class="scorewrap ${sc.over?'edited':''}"><input id="i-${ri}-${pi}-score" class="runtot ${cls}" inputmode="text" placeholder="&mdash;" value="${roundTxt}"
+                 title="This round's score (tap to override)"
+                 oninput="overrideRound(${ri},${pi},this.value)"></span>
+        </div>
+      </div></td>`;
+    });
+    // check cell: total bids must NOT equal tricks (dealer rule)
+    const allBid = round.cells.every(c=>c.bid!=="");
+    let bidCls="chkbox";
+    if(t!==null && anyBid){
+      if(bidSum===t) bidCls="chkbox bad";        // equals tricks -> illegal
+      else if(allBid) bidCls="chkbox ok";        // everyone bid & it's legal -> green
+    }
+    // check cell: total won MUST equal tricks (all tricks accounted for)
+    const allWon = round.cells.every(c=>c.won!=="");
+    let wonCls="chkbox";
+    if(t!==null && anyWon){
+      if(allWon) wonCls = wonSum===t ? "chkbox ok" : "chkbox bad";
+      else if(wonSum>t) wonCls="chkbox bad";     // already over before everyone entered
+    }
+    html += `<td class="chkcell">
+      <div class="${bidCls}">${anyBid?bidSum:"&middot;"}</div>
+    </td>
+    <td class="chkcell">
+      <div class="${wonCls}">${anyWon?wonSum:"&middot;"}</div>
+    </td>
+    <td class="delcell"><button class="delrow" onclick="deleteRound(${ri})">Delete</button></td>`;
+    tr.innerHTML = html;
+    rows.appendChild(tr);
+  });
+
+  const tot = document.getElementById("total-row");
+  const max = Math.max(...running);
+  tot.innerHTML = "<td>TOTAL</td><td></td>" + running.map(v=>
+    `<td class="${v===max&&max!==0?'lead':''}">${v}</td>`).join("") + "<td></td><td></td><td></td>";
+  save();
+
+  // restore focus/caret to the same input after the DOM was rebuilt
+  if(_focusId){
+    const el=document.getElementById(_focusId);
+    if(el){ el.focus(); const L=el.value.length; const pos=_caret==null?L:Math.min(_caret,L);
+      try{el.setSelectionRange(pos,pos);}catch(e){} }
+  }
+}
+
+function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function cleanNum(val){ let s=val.replace(/[^0-9-]/g,''); s=s.replace(/(?!^)-/g,''); return s; }
+function upd(ri,pi,field,val){ state.rounds[ri].cells[pi][field]=cleanNum(val); render(); }
+function updLabel(ri,val){ state.rounds[ri].label=val; save(); }
+function updTricks(ri,val){ state.rounds[ri].tricks=cleanNum(val); render(); }
+function renameP(i,val){ state.players[i]=val||("P"+(i+1)); save(); }
+function overrideRound(ri,pi,val){
+  const c=state.rounds[ri].cells[pi];
+  const s=cleanNum(val);   // keeps leading "-" and digits
+  // if it's a complete number equal to what auto-scoring gives, clear the override
+  const auto=autoScore(c);
+  if(s!=="" && s!=="-" && !isNaN(+s) && auto!==null && (+s)===auto){ c.override=""; }
+  else { c.override = s; }
+  render();
+}
+function addRound(type){ state.rounds.push(newRound(state.players.length,type)); render();
+  window.scrollTo(0,document.body.scrollHeight); }
+function deleteRound(ri){
+  const label = "round " + (ri+1);
+  if(!confirm("Delete "+label+"? This can't be undone.")) return;
+  if(state.rounds.length<=1){ // don't leave zero rounds; just clear it
+    state.rounds=[newRound(state.players.length,"up")]; render(); return;
+  }
+  state.rounds.splice(ri,1); render();
+}
+
+// settings
+function openSheet(){
+  document.getElementById("cfg-bonus").value=state.bonus;
+  document.getElementById("cfg-pertrick").value=state.perTrick;
+  document.getElementById("cfg-miss").value=state.miss;
+  const pc=document.getElementById("players-cfg"); pc.innerHTML="";
+  [2,3,4,5,6,7,8,9,10].forEach(k=>{
+    const b=document.createElement("button");
+    b.textContent=k; if(k===state.players.length)b.className="sel";
+    b.onclick=()=>setPlayerCount(k); pc.appendChild(b);
+  });
+  document.getElementById("sheet-bg").classList.add("open");
+  document.getElementById("sheet").classList.add("open");
+}
+function closeSheet(e){ document.getElementById("sheet-bg").classList.remove("open");
+  document.getElementById("sheet").classList.remove("open"); }
+function setPlayerCount(k){
+  const cur=state.players.length;
+  if(k>cur){ for(let i=cur;i<k;i++) state.players.push("P"+(i+1)); }
+  else state.players=state.players.slice(0,k);
+  state.rounds=state.rounds.map(r=>{
+    if(k>r.cells.length){ while(r.cells.length<k) r.cells.push({bid:"",won:"",override:""}); }
+    else r.cells=r.cells.slice(0,k);
+    return r;
+  });
+  [...document.querySelectorAll('#players-cfg button')].forEach(b=>
+    b.classList.toggle('sel', +b.textContent===k));
+}
+function applySettings(){
+  state.bonus=+document.getElementById("cfg-bonus").value||0;
+  state.perTrick=+document.getElementById("cfg-pertrick").value||0;
+  state.miss=+document.getElementById("cfg-miss").value||0;
+  closeSheet(); render();
+}
+function resetAll(){
+  if(confirm("Clear all scores? Players and settings stay.")){
+    state.rounds=[newRound(state.players.length,"up")]; closeSheet(); render();
+  }
+}
+
+load(); render();
+</script>
+</body>
+</html>
