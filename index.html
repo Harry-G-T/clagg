@@ -151,8 +151,7 @@
   }
   /* Controls */
   .bar{
-    position:fixed;left:0;right:0;bottom:0;padding:12px;
-    background:linear-gradient(transparent,var(--felt-lo) 30%);
+    padding:16px 12px 8px;
     display:flex;gap:10px;justify-content:center;
   }
   .bar button{
@@ -163,12 +162,12 @@
   .add.down{background:var(--felt-hi);color:var(--cream);border:1px solid var(--gold);}
   .add.bonus{background:var(--red);color:#fff;}
   /* Settings sheet */
-  .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:10;}
+  .sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;z-index:30;}
   .sheet-bg.open{display:block;}
   .sheet{
     position:fixed;left:0;right:0;bottom:0;background:var(--felt-hi);
     border-radius:16px 16px 0 0;padding:20px 18px 28px;transform:translateY(100%);
-    transition:transform .25s;z-index:11;max-height:85dvh;overflow:auto;
+    transition:transform .25s;z-index:31;max-height:85dvh;overflow:auto;
   }
   .sheet.open{transform:translateY(0);}
   .sheet h2{margin:0 0 4px;font-size:19px;}
@@ -189,15 +188,173 @@
   .danger{width:100%;margin-top:10px;background:transparent;color:var(--red);
     border:1px solid var(--red);border-radius:10px;padding:12px;font-family:inherit;font-size:14px;}
   .hint{font-size:12px;color:rgba(244,239,227,.55);text-align:center;margin:8px 0 0;line-height:1.5;}
+  /* Pages + bottom nav */
+  .page{padding-bottom:70px;}
+  .bottomnav{
+    position:fixed;left:0;right:0;bottom:0;z-index:20;
+    display:flex;background:var(--felt-lo);border-top:2px solid var(--gold);
+    box-shadow:0 -4px 14px rgba(0,0,0,.3);
+  }
+  .navbtn{
+    flex:1;background:none;border:none;color:rgba(244,239,227,.6);
+    font-family:inherit;font-size:13px;font-weight:700;padding:10px 4px 12px;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+  }
+  .navbtn .navicon{font-size:19px;line-height:1;}
+  .navbtn.active{color:var(--gold);}
+  /* Rules page */
+  .rules{max-width:640px;margin:0 auto;line-height:1.6;}
+  .rules h2{font-size:24px;color:var(--gold);margin:4px 0 12px;}
+  .rules h3{font-size:18px;color:var(--gold);margin:22px 0 6px;border-bottom:1px solid var(--line);padding-bottom:4px;}
+  .rules p{margin:0 0 12px;color:var(--cream);font-size:15px;}
+  .rules p.lead{font-size:16px;color:#fff;}
+  .rules em{color:var(--gold);font-style:normal;font-weight:700;}
+  .rules strong{color:#fff;}
+  .rules .credit{margin-top:24px;font-size:12px;color:rgba(244,239,227,.5);border-top:1px solid var(--line);padding-top:12px;}
+  .rules .mono{font-family:monospace;color:rgba(217,176,106,.85);}
+  /* Bonus picker */
+  .bonus-list{display:flex;flex-direction:column;gap:8px;margin:6px 0 4px;}
+  .bonus-opt{
+    text-align:left;background:rgba(0,0,0,.2);border:1px solid var(--line);
+    color:var(--cream);font-family:inherit;border-radius:10px;padding:12px 14px;
+    display:flex;flex-direction:column;gap:3px;
+  }
+  .bonus-opt:active{background:rgba(217,176,106,.15);border-color:var(--gold);}
+  .bo-name{font-size:16px;font-weight:700;color:var(--gold);}
+  .bo-desc{font-size:12px;color:rgba(244,239,227,.65);line-height:1.4;}
+  .bonus-done{width:100%;margin-top:10px;background:var(--gold);color:var(--felt-lo);
+    border:none;border-radius:10px;padding:14px;font-family:inherit;font-size:16px;font-weight:700;}
+  .vbadge{
+    display:inline-block;background:var(--red);color:#fff;font-size:10px;font-weight:700;
+    padding:2px 6px;border-radius:5px;margin:4px 0;text-transform:uppercase;letter-spacing:.3px;
+    max-width:70px;line-height:1.2;
+  }
+  /* ---- Game ---- */
+  .gsetup{max-width:480px;margin:0 auto;}
+  .gsetup h2{font-size:24px;color:var(--gold);margin:4px 0 8px;}
+  .glabel{display:block;margin:18px 0 8px;font-size:14px;color:var(--gold);font-weight:700;}
+  .gcount{display:flex;gap:8px;}
+  .gcbtn{flex:1;padding:14px 0;border-radius:10px;border:1px solid var(--line);
+    background:transparent;color:var(--cream);font-family:inherit;font-size:18px;font-weight:700;}
+  .gcbtn.sel{background:var(--gold);color:var(--felt-lo);border-color:var(--gold);}
+  .gstart{display:flex;gap:8px;}
+  .gsbtn{flex:1;padding:12px 6px;border-radius:10px;border:1px solid var(--line);
+    background:transparent;color:var(--cream);font-family:inherit;font-size:14px;font-weight:700;}
+  .gsbtn.sel{background:var(--gold);color:var(--felt-lo);border-color:var(--gold);}
+  .ginput{width:100%;box-sizing:border-box;background:rgba(0,0,0,.2);border:1px solid var(--line);
+    color:var(--cream);font-family:inherit;font-size:17px;border-radius:10px;padding:12px;}
+  .gbtn{width:100%;margin-top:20px;font-family:inherit;font-size:17px;font-weight:700;
+    border-radius:12px;padding:15px;border:none;background:var(--felt-hi);color:var(--cream);}
+  .gbtn.primary{background:var(--gold);color:var(--felt-lo);}
+  .ghint{font-size:12px;color:rgba(244,239,227,.5);text-align:center;margin-top:12px;}
+  .gtop{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+  .gtrump{display:flex;align-items:center;}
+  .trumpwrap{position:relative;display:flex;align-items:center;gap:2px;padding-bottom:14px;}
+  .deckcard{width:48px;height:68px;border-radius:8px;background:repeating-linear-gradient(45deg,#1e5a44,#1e5a44 4px,#164534 4px,#164534 8px);
+    border:1.5px solid var(--gold);box-shadow:1px 1px 3px rgba(0,0,0,.4);}
+  .turncard{width:52px;height:74px;background:var(--cream);border-radius:8px;margin-left:-26px;position:relative;
+    box-shadow:2px 2px 5px rgba(0,0,0,.4);transform:rotate(6deg);font-weight:800;}
+  .turncard.red{color:var(--red);} .turncard.blk{color:#111;}
+  .turncard .tc-r{position:absolute;top:4px;left:6px;font-size:19px;line-height:1;}
+  .turncard .tc-s{position:absolute;bottom:5px;right:6px;font-size:24px;line-height:1;}
+  .trumplabel{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:10px;
+    color:var(--gold);text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
+  .ground{font-size:13px;color:rgba(244,239,227,.7);flex:1;}
+  .gmenu{background:none;border:1px solid var(--line);color:var(--cream);font-family:inherit;
+    font-size:12px;border-radius:8px;padding:6px 12px;}
+  /* ===== Oval table layout ===== */
+  .gtablearea{position:relative;margin-bottom:10px;}
+  .oval{position:relative;width:100%;height:44vh;min-height:280px;max-height:420px;
+    background:radial-gradient(ellipse at center, #1b6b4f 0%, #14523d 70%, #0f3d2e 100%);
+    border:6px solid #5a3a1e;border-radius:50%/50%;
+    box-shadow:inset 0 0 30px rgba(0,0,0,.4),0 6px 16px rgba(0,0,0,.4);}
+  .ovalcenter{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);
+    display:flex;flex-direction:column;align-items:center;gap:4px;z-index:1;}
+  .seat{position:absolute;transform:translate(-50%,-50%);width:88px;text-align:center;z-index:2;}
+  .seat-badges{min-height:16px;display:flex;gap:3px;justify-content:center;align-items:center;}
+  .seat-name{font-size:13px;font-weight:700;color:var(--cream);white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;max-width:88px;}
+  .seat.me .seat-name{color:var(--gold);}
+  .seat.turn .seat-name{color:var(--gold);}
+  .seat-score{font-size:20px;font-weight:800;color:var(--gold);line-height:1.1;
+    font-family:"Helvetica Neue",Arial,sans-serif;font-variant-numeric:tabular-nums;}
+  .seat-wb{font-size:11px;font-weight:700;color:rgba(244,239,227,.75);
+    font-family:"Helvetica Neue",Arial,sans-serif;}
+  .seat-wb.bt-ok{color:var(--good);} .seat-wb.bt-over{color:var(--red);}
+  .seat.turn{filter:drop-shadow(0 0 8px rgba(217,176,106,.9));}
+  .seat.turn .seat-badges{transform:scale(1.05);}
+  .seat.turn::before{content:"";position:absolute;top:-6px;left:50%;transform:translateX(-50%);
+    width:74px;height:74px;border:2px solid var(--gold);border-radius:50%;
+    box-shadow:0 0 12px rgba(217,176,106,.6);pointer-events:none;opacity:.7;}
+  .turnbanner{text-align:center;font-size:15px;font-weight:700;color:rgba(244,239,227,.8);
+    padding:10px;border-radius:10px;background:rgba(0,0,0,.2);}
+  .turnbanner.you{color:var(--felt-lo);background:var(--gold);font-size:16px;
+    animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 rgba(217,176,106,0);}50%{box-shadow:0 0 16px rgba(217,176,106,.7);}}
+  .seat-cardslot{min-height:4px;margin-top:3px;display:flex;justify-content:center;}
+  .badge-d{width:18px;height:18px;border-radius:50%;background:var(--gold);color:var(--felt-lo);
+    font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;}
+  .badge-turn{color:var(--gold);font-size:12px;}
+  /* seat cards (played + forehead) */
+  .seatcard{width:40px;height:58px;background:var(--cream);border-radius:6px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+    font-weight:800;box-shadow:0 2px 5px rgba(0,0,0,.4);}
+  .seatcard.red{color:var(--red);} .seatcard.blk{color:#111;}
+  .seatcard .sc-r{font-size:20px;line-height:1;font-family:"Helvetica Neue",Arial,sans-serif;}
+  .seatcard .sc-s{font-size:17px;line-height:1;}
+  .seatcard.back{background:repeating-linear-gradient(45deg,#1e5a44,#1e5a44 3px,#164534 3px,#164534 6px);
+    border:1.5px solid var(--gold);}
+  .gmsg{margin-bottom:12px;}
+  .roundover{background:rgba(0,0,0,.3);border:1px solid var(--gold);border-radius:12px;padding:14px;max-width:420px;margin:0 auto;}
+  .roundover h3{margin:0 0 10px;color:var(--gold);font-size:18px;text-align:center;}
+  .ro-table{width:100%;border-collapse:collapse;font-family:"Helvetica Neue",Arial,sans-serif;}
+  .ro-table th{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:rgba(244,239,227,.5);
+    font-weight:700;padding:2px 4px;text-align:right;}
+  .ro-table th:first-child{text-align:left;}
+  .ro-table td{padding:6px 4px;border-bottom:1px solid var(--line);font-size:15px;}
+  .ro-nm{color:var(--cream);font-weight:700;text-align:left;}
+  .ro-wb{text-align:right;color:rgba(244,239,227,.7);font-variant-numeric:tabular-nums;}
+  .ro-d{text-align:right;font-weight:800;font-variant-numeric:tabular-nums;}
+  .ro-tot{text-align:right;color:var(--gold);font-weight:800;font-variant-numeric:tabular-nums;}
+  .ro-d.pos,.ro-tot.pos{color:var(--good);} .ro-d.neg,.ro-tot.neg{color:var(--red);}
+  .ro-d.pos{color:var(--good);} .ro-d.neg{color:var(--red);}
+  /* seat delta pop */
+  .seat-pop{position:absolute;top:-22px;left:50%;transform:translateX(-50%);
+    font-family:"Helvetica Neue",Arial,sans-serif;font-size:18px;font-weight:800;
+    padding:2px 9px;border-radius:12px;white-space:nowrap;z-index:5;
+    animation:popin .3s ease-out;box-shadow:0 2px 8px rgba(0,0,0,.4);}
+  .seat-pop.pos{background:var(--good);color:#08301f;}
+  .seat-pop.neg{background:var(--red);color:#fff;}
+  @keyframes popin{0%{transform:translateX(-50%) scale(.4);opacity:0;}100%{transform:translateX(-50%) scale(1);opacity:1;}}
+  .gbid{background:rgba(217,176,106,.12);border:1px solid var(--gold);border-radius:12px;
+    padding:12px;margin-bottom:12px;}
+  .gbid-label{font-size:14px;font-weight:700;color:var(--gold);margin-bottom:8px;text-align:center;}
+  .gbid-btns{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+  .gbid-btns button{min-width:48px;padding:14px;border-radius:9px;border:none;
+    background:var(--gold);color:var(--felt-lo);font-family:inherit;font-size:20px;font-weight:800;}
+  /* ===== Your hand (bigger) ===== */
+  .ghand{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding:4px 0 8px;}
+  .hcard{width:66px;height:96px;background:var(--cream);border:3px solid transparent;border-radius:10px;
+    font-family:inherit;box-shadow:0 3px 7px rgba(0,0,0,.4);padding:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+  .hcard.red{color:var(--red);} .hcard.blk{color:#111;}
+  .hcard .hc-r{font-size:34px;font-weight:800;line-height:1;font-family:"Helvetica Neue",Arial,sans-serif;}
+  .hcard .hc-s{font-size:30px;line-height:1;}
+  .hcard.playable{border-color:var(--gold);box-shadow:0 0 14px rgba(217,176,106,.7);}
+  .hcard.disabled{opacity:.32;}
+  .handblind{color:rgba(244,239,227,.7);font-size:14px;text-align:center;padding:16px;line-height:1.5;}
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Clagg <span class="suit"><span class="blk">&spades;</span><span class="red">&hearts;</span><span class="blk">&clubs;</span><span class="red">&diams;</span></span> <span class="ver">v16</span></h1>
+  <h1>Clagg <span class="suit"><span class="blk">&spades;</span><span class="red">&hearts;</span><span class="blk">&clubs;</span><span class="red">&diams;</span></span> <span class="ver">v36</span></h1>
   <button class="settings-btn" onclick="openSheet()">&#9881; Settings</button>
 </header>
+<div id="errbox" style="display:none;background:#c0392b;color:#fff;padding:10px 12px;border-radius:8px;margin-bottom:12px;font-family:monospace;font-size:13px;word-break:break-word;"></div>
 
+<!-- ==================== PAGE 1: SCORECARD ==================== -->
+<div id="page-score" class="page">
 <table class="board">
   <thead><tr id="head-row"></tr></thead>
   <tbody id="rows"></tbody>
@@ -207,8 +364,91 @@
 <div class="bar">
   <button class="add up" onclick="addRound('up')">Round &uarr;</button>
   <button class="add down" onclick="addRound('down')">Round &darr;</button>
-  <button class="add bonus" onclick="addRound('bonus')">&#9733; Bonus</button>
+  <button class="add bonus" onclick="openBonusPicker()">&#9733; Bonus</button>
 </div>
+</div>
+
+<!-- ==================== PAGE 2: RULES ==================== -->
+<div id="page-rules" class="page" style="display:none;">
+  <div class="rules">
+    <h2>How to play</h2>
+    <p class="lead">Clagg (widely known as Oh Hell, and also as Oh Pshaw, Blackout, Bust or Nomination Whist) is a trick-taking game for 3&ndash;7 players, best with 4&ndash;6. Everyone plays for themselves. The whole point is to win <em>exactly</em> the number of tricks you bid &mdash; no more, no fewer.</p>
+
+    <h3>The deal</h3>
+    <p>A standard 52-card deck is used, ranking high to low: A K Q J 10 9 8 7 6 5 4 3 2. The number of cards dealt changes every hand. A common pattern counts down then back up &mdash; for example 7, 6, 5, 4, 3, 2, 1, then 2, 3, 4, 5, 6, 7 &mdash; so the trick count each round equals the number of cards in your hand. After dealing, the next card is turned face up; its suit is <strong>trump</strong> for that hand and beats all other suits.</p>
+
+    <h3>Bidding</h3>
+    <p>Starting to the dealer's left and going clockwise, each player predicts how many tricks they will take, from zero up to the number of cards dealt. The dealer bids last.</p>
+    <p><strong>The hook (dealer rule):</strong> a common option forbids the dealer from bidding a number that would make the total of all bids equal the number of tricks available. This guarantees at least one player must miss, adding tension. In this app, the <em>Total bids</em> box turns red when the bids add up to the tricks &mdash; that's the hook being broken.</p>
+
+    <h3>Playing the tricks</h3>
+    <p>The player to the dealer's left leads the first trick. You must <strong>follow the suit led</strong> if you can; if you have none of that suit, you may play anything, including a trump. A trick is won by the highest trump played, or if no trump was played, the highest card of the suit led. The winner of each trick leads the next. Play until all cards are gone.</p>
+
+    <h3>Scoring</h3>
+    <p>The most common method: if you take <em>exactly</em> your bid you score a bonus (commonly 10) plus 1 point per trick taken; miss your bid and you score nothing. A successful bid of zero often scores a flat bonus. This app lets you set the bonus, the per-trick value and the miss score yourself in Settings &mdash; the default is 10 plus 3 per trick.</p>
+    <p>The player with the highest score at the end of all the hands wins.</p>
+
+    <h3>Bonus rounds</h3>
+    <p>Clagg is often spiced up with special rounds. The scorecard's <strong>&#9733; Bonus</strong> button lets you add any of these:</p>
+    <p><em>Mis&egrave;re</em> &mdash; the goal flips: avoid tricks entirely. You lose points for every trick you're forced to win (5 per trick by default).</p>
+    <p><em>Bid mis&egrave;re</em> &mdash; you actively declare mis&egrave;re. Win no tricks and you're safe (zero); take even one and you pay the penalty per trick.</p>
+    <p><em>Bid</em> &mdash; trump is auctioned rather than turned up: players bid for it and the highest bidder chooses trump. If bids tie, the earliest bidder wins it. Play then scores as normal.</p>
+    <p><em>Blind</em> &mdash; you place your bid before looking at your hand.</p>
+    <p><em>Half-blind</em> &mdash; you may look at your cards, but the trump suit stays hidden until play begins.</p>
+    <p><em>Anarchy</em> &mdash; the follow-suit rule is dropped: play any card at any time.</p>
+    <p><em>Forehead (1-card rounds)</em> &mdash; in the first and last hands, when only one card is dealt, you hold it to your forehead: you can see everyone else's card but not your own. You bid on that basis, then all cards flip up for the single trick.</p>
+    <p><em>Ascending madness</em> &mdash; tricks are worth escalating points: the 1st trick 2, the 2nd 4, the 3rd 6, and so on. <em>Descending madness</em> reverses it: the 1st trick is worth twice the hand size, counting down to 2 for the last. You still bid for the normal 10-point bonus &mdash; unless combined with mis&egrave;re, where everyone aims for zero. Because the score depends on <em>which</em> tricks you win, you enter these round scores by hand on the card.</p>
+
+    <p class="credit">Rules summarised from Wikipedia's "Oh hell" article and Pagat.com, adapted to the way Clagg is commonly played. See <span class="mono">en.wikipedia.org/wiki/Oh_hell</span> and <span class="mono">pagat.com/exact/ohhell.html</span> for full detail and history.</p>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3: PLAY ==================== -->
+<div id="page-play" class="page" style="display:none;">
+  <div id="game-root">
+    <!-- Setup screen -->
+    <div id="game-setup" class="gsetup">
+      <h2>Play Clagg</h2>
+      <p class="lead">You versus simple bots. Deal runs 1&rarr;7, bonus rounds of 7 you choose, then 6&rarr;1.</p>
+      <label class="glabel">Players (including you)</label>
+      <div class="gcount" id="gcount"></div>
+      <label class="glabel">Start from</label>
+      <div class="gstart" id="gstart"></div>
+      <label class="glabel">Your name</label>
+      <input id="gname" class="ginput" value="You" maxlength="12">
+      <button class="gbtn primary" onclick="startGame()">Deal first hand</button>
+      <p class="ghint" id="gsetup-note"></p>
+    </div>
+
+    <!-- Game screen -->
+    <div id="game-play" style="display:none;">
+      <div class="gtop">
+        <div class="ground" id="groundinfo"></div>
+        <button class="gmenu" onclick="quitGame()">Quit</button>
+      </div>
+      <div class="gtablearea" id="gtablearea">
+        <div class="oval">
+          <div class="ovalcenter" id="ovalcenter">
+            <div class="gtrump" id="gtrump"></div>
+          </div>
+          <div id="seats"></div>
+        </div>
+      </div>
+      <div class="gmsg" id="gmsg"></div>
+      <div class="gbid" id="gbid" style="display:none;"></div>
+      <div class="ghand" id="ghand"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ==================== BOTTOM NAV ==================== -->
+<nav class="bottomnav">
+  <button class="navbtn active" id="nav-score" onclick="showPage('score')"><span class="navicon">&#9776;</span>Scorecard</button>
+  <button class="navbtn" id="nav-rules" onclick="showPage('rules')"><span class="navicon">&#9432;</span>Rules</button>
+  <button class="navbtn" id="nav-play" onclick="showPage('play')"><span class="navicon">&spades;</span>Play</button>
+</nav>
+
 
 <!-- Settings -->
 <div class="sheet-bg" id="sheet-bg" onclick="closeSheet(event)">
@@ -228,6 +468,10 @@
       <label>Points if you miss<span class="sub">usually 0</span></label>
       <input type="number" id="cfg-miss" inputmode="numeric">
     </div>
+    <div class="field">
+      <label>Mis&egrave;re penalty per trick<span class="sub">lost per trick won in mis&egrave;re rounds</span></label>
+      <input type="number" id="cfg-miserePer" inputmode="numeric">
+    </div>
 
     <label style="display:block;margin-top:16px;font-size:15px;">Players</label>
     <div class="players-cfg" id="players-cfg"></div>
@@ -237,16 +481,39 @@
   </div>
 </div>
 
+<!-- Bonus picker -->
+<div class="sheet-bg" id="bonus-bg" onclick="closeBonusPicker(event)">
+  <div class="sheet" id="bonus-sheet" onclick="event.stopPropagation()">
+    <h2>Add a bonus round</h2>
+    <p>Pick the variant. You can still set the tricks and edit scores after.</p>
+    <div id="bonus-list" class="bonus-list"></div>
+    <button class="close" onclick="closeBonusPicker()">Cancel</button>
+  </div>
+</div>
+
 <script>
 const KEY = "clagg-scorer-v1";
 let state;
 
 const defaults = () => ({
-  bonus: 10, perTrick: 3, miss: 0,
+  bonus: 10, perTrick: 3, miss: 0, miserePer: 5,
   players: ["P1","P2","P3","P4","P5","P6"],
   rounds: [ newRound(6,"up") ]
 });
-function newRound(n,type){ return {type:type||"up", label:"", tricks:"", cells:Array.from({length:n},()=>({bid:"",won:"",override:""}))}; }
+function newRound(n,type,variant){ return {type:type||"up", variant:variant||"", label:"", tricks:"", cells:Array.from({length:n},()=>({bid:"",won:"",override:""}))}; }
+
+// Bonus variant definitions: label shown, and how they score.
+// scoring: "normal" = 10+perTrick, "misere" = -miserePer*won, "bidmisere" = 0 if won 0 else -miserePer*won, "manual" = user types it
+var VARIANTS = {
+  misere:    {name:"Mis\u00e8re",         short:"MIS", scoring:"misere",    hasTricks:true},
+  bidmisere: {name:"Bid mis\u00e8re",     short:"BMIS",scoring:"bidmisere", hasTricks:true},
+  bud:       {name:"Bid",             short:"BID", scoring:"normal",    hasTricks:true},
+  blind:     {name:"Blind",           short:"BLND",scoring:"normal",    hasTricks:true},
+  halfblind: {name:"Half-blind",      short:"HALF",scoring:"normal",    hasTricks:true},
+  anarchy:   {name:"Anarchy",         short:"ANAR",scoring:"normal",    hasTricks:true},
+  ascmad:    {name:"Ascending madness",short:"A-MAD",scoring:"manual",  hasTricks:true},
+  descmad:   {name:"Descending madness",short:"D-MAD",scoring:"manual", hasTricks:true}
+};
 
 // Compute tricks for every round from its type + position in the sequence.
 // up = previous+1 (first up round = 1), down = previous-1.
@@ -268,11 +535,13 @@ function load(){
   try{ const s = localStorage.getItem(KEY); state = s?JSON.parse(s):defaults(); }
   catch(e){ state = defaults(); }
   if(!state.rounds || !state.rounds.length) state.rounds=[newRound(state.players.length,"up")];
-  // migrate older formats -> {type,label,cells}
+  if(state.miserePer==null) state.miserePer=5;
+  // migrate older formats -> {type,variant,label,cells}
   state.rounds = state.rounds.map(r=>{
-    if(Array.isArray(r)) return {type:"up", label:"", tricks:"", cells:r.map(c=>({bid:c.bid||"",won:c.won||"",override:""}))};
+    if(Array.isArray(r)) return {type:"up", variant:"", label:"", tricks:"", cells:r.map(c=>({bid:c.bid||"",won:c.won||"",override:""}))};
     return {
       type: r.type || "up",
+      variant: r.variant || "",
       label: r.label || "",
       tricks: r.tricks!=null ? r.tricks : "",
       cells: (r.cells||[]).map(c=>({bid:c.bid||"",won:c.won||"",override:c.override||""}))
@@ -281,19 +550,31 @@ function load(){
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
 
-// scoring for one cell (auto). Returns null if incomplete.
-function autoScore(c){
+// scoring for one cell (auto), aware of the round's bonus variant. Returns null if incomplete.
+function autoScore(c, round){
   if(c.bid===""||c.won==="") return null;
   const bid=+c.bid, won=+c.won;
+  var scoring = "normal";
+  if(round && round.variant && VARIANTS[round.variant]) scoring = VARIANTS[round.variant].scoring;
+  if(scoring==="misere"){
+    return -won*state.miserePer;              // aim zero; lose per trick won
+  }
+  if(scoring==="bidmisere"){
+    return won===0 ? 0 : -won*state.miserePer; // declared nil: made=0, else penalty
+  }
+  if(scoring==="manual"){
+    return null;                              // madness: must be entered manually
+  }
+  // normal
   if(bid===won) return state.bonus + won*state.perTrick;
   return state.miss;
 }
 // effective per-cell score: override wins if set to a complete number
-function cellScore(c){
+function cellScore(c, round){
   if(c.override!=="" && c.override!=="-" && !isNaN(+c.override)){
     return {val:+c.override, over:true, has:true};
   }
-  const a=autoScore(c);
+  const a=autoScore(c, round);
   return {val:a===null?0:a, over:false, has:a!==null};
 }
 
@@ -321,9 +602,11 @@ function render(){
       ? `<input id="i-${ri}-trk" class="trkinput" inputmode="text" placeholder="?" value="${escapeHtml(round.tricks)}"
                 title="Tricks this bonus round" oninput="updTricks(${ri},this.value)">`
       : `<div class="rndtricks">${t}</div>`;
+    var vName = (round.variant && VARIANTS[round.variant]) ? VARIANTS[round.variant].name : "";
     const roundCol = round.type==="bonus"
       ? `<span class="rndnum">${ri+1}</span>
-         <input class="rndlabel" placeholder="type?" value="${escapeHtml(round.label)}"
+         ${vName?`<div class="vbadge">${vName}</div>`:""}
+         <input class="rndlabel" placeholder="note?" value="${escapeHtml(round.label)}"
                 onchange="updLabel(${ri},this.value)">`
       : `<span class="rndnum">${ri+1}</span>`;
     let html = `<td class="rndcell">
@@ -334,7 +617,7 @@ function render(){
     </td>`;
     let bidSum=0, wonSum=0, anyBid=false, anyWon=false;
     round.cells.forEach((c,pi)=>{
-      const sc = cellScore(c);
+      const sc = cellScore(c, round);
       if(sc.has) running[pi]+=sc.val;
       if(c.bid!==""){ bidSum+=(+c.bid); anyBid=true; }
       if(c.won!==""){ wonSum+=(+c.won); anyWon=true; }
@@ -408,13 +691,45 @@ function overrideRound(ri,pi,val){
   const c=state.rounds[ri].cells[pi];
   const s=cleanNum(val);   // keeps leading "-" and digits
   // if it's a complete number equal to what auto-scoring gives, clear the override
-  const auto=autoScore(c);
+  const auto=autoScore(c, state.rounds[ri]);
   if(s!=="" && s!=="-" && !isNaN(+s) && auto!==null && (+s)===auto){ c.override=""; }
   else { c.override = s; }
   render();
 }
 function addRound(type){ state.rounds.push(newRound(state.players.length,type)); render();
   window.scrollTo(0,document.body.scrollHeight); }
+function addBonusRound(variant){
+  state.rounds.push(newRound(state.players.length,"bonus",variant));
+  closeBonusPicker(); render();
+  window.scrollTo(0,document.body.scrollHeight);
+}
+function openBonusPicker(){
+  var list=document.getElementById("bonus-list"); list.innerHTML="";
+  var descs={
+    misere:"Avoid tricks. Lose "+state.miserePer+" per trick won.",
+    bidmisere:"Declare nil. Win zero = 0 pts, else lose "+state.miserePer+" per trick.",
+    bud:"Bid for trump \u2013 highest bidder wins (ties to first bidder).",
+    blind:"Bid before looking at your cards.",
+    halfblind:"See your cards, but trump stays hidden.",
+    anarchy:"No follow-suit \u2013 play any card, any order.",
+    ascmad:"Trick 1 = 2 pts, trick 2 = 4\u2026 Enter scores manually.",
+    descmad:"First trick = 2\u00d7cards, down to 2. Enter scores manually."
+  };
+  Object.keys(VARIANTS).forEach(function(key){
+    var v=VARIANTS[key];
+    var b=document.createElement("button");
+    b.className="bonus-opt";
+    b.innerHTML="<span class='bo-name'>"+v.name+"</span><span class='bo-desc'>"+(descs[key]||"")+"</span>";
+    b.onclick=function(){ addBonusRound(key); };
+    list.appendChild(b);
+  });
+  document.getElementById("bonus-bg").classList.add("open");
+  document.getElementById("bonus-sheet").classList.add("open");
+}
+function closeBonusPicker(e){
+  document.getElementById("bonus-bg").classList.remove("open");
+  document.getElementById("bonus-sheet").classList.remove("open");
+}
 function deleteRound(ri){
   const label = "round " + (ri+1);
   if(!confirm("Delete "+label+"? This can't be undone.")) return;
@@ -429,6 +744,7 @@ function openSheet(){
   document.getElementById("cfg-bonus").value=state.bonus;
   document.getElementById("cfg-pertrick").value=state.perTrick;
   document.getElementById("cfg-miss").value=state.miss;
+  document.getElementById("cfg-miserePer").value=state.miserePer;
   const pc=document.getElementById("players-cfg"); pc.innerHTML="";
   [2,3,4,5,6,7,8,9,10].forEach(k=>{
     const b=document.createElement("button");
@@ -456,6 +772,7 @@ function applySettings(){
   state.bonus=+document.getElementById("cfg-bonus").value||0;
   state.perTrick=+document.getElementById("cfg-pertrick").value||0;
   state.miss=+document.getElementById("cfg-miss").value||0;
+  state.miserePer=+document.getElementById("cfg-miserePer").value||0;
   closeSheet(); render();
 }
 function resetAll(){
@@ -464,7 +781,605 @@ function resetAll(){
   }
 }
 
-load(); render();
+// ============================================================
+//  PLAYABLE GAME ENGINE (you vs simple bots)
+// ============================================================
+var G = null; // active game state
+
+var SUITS = ["S","H","C","D"];
+var SUIT_SYM = {S:"\u2660", H:"\u2665", C:"\u2663", D:"\u2666"};
+var SUIT_RED = {S:false, H:true, C:false, D:true};
+var RANKS = [2,3,4,5,6,7,8,9,10,11,12,13,14]; // 11=J 12=Q 13=K 14=A
+var RANK_LABEL = {11:"J",12:"Q",13:"K",14:"A"};
+function rankLabel(r){ return RANK_LABEL[r] || String(r); }
+
+// deal sequence: 1..7, then one bonus 7 (type chosen per game), then 7..1
+function buildSequence(){
+  var seq=[];
+  for(var i=1;i<=7;i++) seq.push({cards:i, variant:""});   // 1..7 up
+  return seq;   // down rounds appended when the player finishes the bonus stage
+}
+var BONUS_INSERT_AT = 7; // after the 7 up-rounds (indexes 0..6)
+
+function makeDeck(){
+  var d=[];
+  SUITS.forEach(function(s){ RANKS.forEach(function(r){ d.push({s:s,r:r}); }); });
+  return d;
+}
+function shuffle(a){
+  for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; }
+  return a;
+}
+
+// setup screen: player count buttons
+var gamePlayers = 4;
+var gameStart = "1"; // "1" = full game from round 1; "7" = start at the 7-card round + bonus
+function renderSetup(){
+  var gc=document.getElementById("gcount"); if(!gc) return;
+  gc.innerHTML="";
+  [3,4,5,6,7].forEach(function(k){
+    var b=document.createElement("button");
+    b.className="gcbtn"+(k===gamePlayers?" sel":"");
+    b.textContent=k; b.onclick=function(){ gamePlayers=k; renderSetup(); };
+    gc.appendChild(b);
+  });
+  var gs=document.getElementById("gstart"); if(gs){
+    gs.innerHTML="";
+    [["1","Round 1 (full game)"],["7","Round 7 + bonus"]].forEach(function(pair){
+      var b=document.createElement("button");
+      b.className="gsbtn"+(pair[0]===gameStart?" sel":"");
+      b.textContent=pair[1]; b.onclick=function(){ gameStart=pair[0]; renderSetup(); };
+      gs.appendChild(b);
+    });
+  }
+}
+
+function startGame(){
+  var nameEl=document.getElementById("gname");
+  var myName=(nameEl && nameEl.value.trim()) ? nameEl.value.trim() : "You";
+  var names=[myName];
+  var botNames=["Bot A","Bot B","Bot C","Bot D","Bot E","Bot F"];
+  for(var i=1;i<gamePlayers;i++) names.push(botNames[i-1]);
+  G={
+    players: names.map(function(nm,idx){ return {name:nm, human:idx===0, score:0}; }),
+    n: gamePlayers,
+    seq: buildSequence(),
+    roundIdx: 0,
+    dealer: gamePlayers-1
+  };
+  // start at round 7 if chosen: jump to the 7-card up round (index 6), bonus stage follows
+  if(gameStart==="7"){ G.roundIdx = 6; }
+  document.getElementById("game-setup").style.display="none";
+  document.getElementById("game-play").style.display="block";
+  beginRound();
+}
+
+function quitGame(){
+  if(!confirm("Quit this game? Scores will be lost.")) return;
+  G=null;
+  document.getElementById("game-play").style.display="none";
+  document.getElementById("game-setup").style.display="block";
+  renderSetup();
+}
+
+// ---- Round setup ----
+function beginRound(){
+  // Bonus stage: once we've finished the 1..7 climb, repeatedly offer a bonus round
+  // or the choice to descend. Each chosen bonus plays, then we return here and ask again.
+  if(G.inBonusStage && !G._bonusOpen){
+    G._bonusOpen=true;
+    askBonusMenu();
+    return;
+  }
+  var r=G.seq[G.roundIdx];
+  var nc=r.cards;
+  G.cards=nc;
+  G.variant=r.variant||"";
+  var deck=shuffle(makeDeck());
+  G.hands=[];
+  for(var p=0;p<G.n;p++){ G.hands.push(deck.splice(0,nc)); }
+  sortHand(G.hands[0]);
+  G.trumpCard = deck.length? deck[0] : null;
+  G.trump = G.trumpCard ? G.trumpCard.s : null;
+  G.trumpHidden = (G.variant==="halfblind");
+  // "forehead" round: 1 card, and it's the first or last round of the game.
+  // You can't see your own card, but you can see everyone else's.
+  G.forehead = (nc===1 && (G.roundIdx===0 || G.roundIdx===G.seq.length-1));
+  G.bids=new Array(G.n).fill(null);
+  G.tricksWon=new Array(G.n).fill(0);
+  G.leader=(G.dealer+1)%G.n;
+  G.turn=G.leader;
+  G.phase="bidding";
+  G.locked=false;
+  G.trick=[];
+  renderGame();
+  stepBidding();
+}
+
+function askBonusMenu(){
+  if(!G._bonusCount) G._bonusCount=0;
+  var list=document.getElementById("bonus-list"); list.innerHTML="";
+  var descs={
+    normal:"A standard round of 7.",
+    misere:"Avoid tricks. Lose "+state.miserePer+" per trick won.",
+    bidmisere:"Declare nil. Win zero = 0, else lose "+state.miserePer+" per trick.",
+    bud:"Bid for trump \u2013 highest bidder wins.",
+    blind:"Bid before looking at your cards.",
+    halfblind:"See cards, trump hidden.",
+    anarchy:"No follow-suit.",
+    ascmad:"Escalating trick values (manual score).",
+    descmad:"Descending trick values (manual score)."
+  };
+  var opts=[["normal","Normal round"]].concat(
+    Object.keys(VARIANTS).map(function(k){return [k,VARIANTS[k].name];})
+  );
+  document.querySelector("#bonus-sheet h2").textContent="Bonus round (7 cards)";
+  document.querySelector("#bonus-sheet p").textContent =
+    G._bonusCount>0
+      ? "You've played "+G._bonusCount+" bonus round"+(G._bonusCount>1?"s":"")+". Add another, or go down 6\u21921."
+      : "Add a bonus round of 7, or go straight down 6\u21921. You'll be asked again after each one.";
+  opts.forEach(function(pair){
+    var key=pair[0], nm=pair[1];
+    var b=document.createElement("button"); b.className="bonus-opt";
+    b.innerHTML="<span class='bo-name'>"+nm+"</span><span class='bo-desc'>"+(descs[key]||"")+"</span>";
+    b.onclick=function(){
+      var variant = (key==="normal")?"":key;
+      // append ONE bonus round and play it now; we'll re-enter the bonus stage after it
+      G.seq.push({cards:7, variant:variant});
+      G.roundIdx=G.seq.length-1;   // point at the round we just added
+      G._bonusCount++;
+      G._bonusOpen=false;
+      G.inBonusStage=false;        // leave bonus stage to actually play this round
+      closeBonusPicker();
+      beginRound();
+    };
+    list.appendChild(b);
+  });
+  // Go-down button: append the 6..1 descent and continue
+  var done=document.createElement("button");
+  done.className="bonus-done";
+  done.textContent = "Go down 6 \u2192 1";
+  done.onclick=function(){
+    for(var j=6;j>=1;j--) G.seq.push({cards:j, variant:""});
+    G.descending=true;
+    G.inBonusStage=false;
+    G._bonusOpen=false;
+    G.roundIdx=G.seq.length-6;    // first down round (6 cards)
+    closeBonusPicker();
+    beginRound();
+  };
+  list.appendChild(done);
+  document.getElementById("bonus-bg").classList.add("open");
+  document.getElementById("bonus-sheet").classList.add("open");
+}
+
+function sortHand(h){
+  h.sort(function(a,b){
+    if(a.s!==b.s) return SUITS.indexOf(a.s)-SUITS.indexOf(b.s);
+    return b.r-a.r;
+  });
+}
+
+// ---- Bidding ----
+function stepBidding(){
+  if(G.bids.every(function(x){return x!==null;})){
+    G.phase="play";
+    G.turn=G.leader;
+    renderGame();
+    setTimeout(stepPlay, 400);
+    return;
+  }
+  var p=G.turn;
+  if(G.players[p].human){
+    showBidUI();
+  }else{
+    var b=botBid(p);
+    setTimeout(function(){ placeBid(p,b); }, 500);
+  }
+}
+function bidChoices(p){
+  var max=G.cards;
+  var arr=[]; for(var i=0;i<=max;i++) arr.push(i);
+  if(p===G.dealer){
+    var sum=0,cnt=0;
+    for(var k=0;k<G.n;k++){ if(k!==p && G.bids[k]!=null){ sum+=G.bids[k]; cnt++; } }
+    if(cnt===G.n-1){
+      arr=arr.filter(function(v){ return sum+v!==G.cards; });
+    }
+  }
+  return arr;
+}
+function botBid(p){
+  var bid;
+  if(G.forehead){
+    // can't see own card; judge from everyone else's single cards + trump.
+    // count how many opponents hold a clearly strong card (beats a typical card)
+    var strongOthers=0, cardsSeen=0;
+    for(var q=0;q<G.n;q++){
+      if(q===p) continue;
+      var oc=G.hands[q][0]; cardsSeen++;
+      var isTrump=(G.trump && oc.s===G.trump);
+      if(isTrump || oc.r>=12) strongOthers++;   // trump or Q+ likely to beat me
+    }
+    // if few strong cards around, more chance my hidden card wins -> bid 1, else 0
+    bid = (strongOthers <= Math.floor((G.n-1)/2)) ? 1 : 0;
+    if(G.variant==="misere"||G.variant==="bidmisere") bid=0;
+  } else {
+    var h=G.hands[p], est=0;
+    h.forEach(function(c){
+      if(c.r>=13) est+=1;
+      else if(c.r===12) est+=0.5;
+      if(G.trump && c.s===G.trump && c.r>=10) est+=0.4;
+    });
+    bid=Math.round(est);
+    if(G.variant==="misere"||G.variant==="bidmisere") bid=0;
+  }
+  if(bid>G.cards) bid=G.cards; if(bid<0) bid=0;
+  var allowed=bidChoices(p);
+  if(allowed.indexOf(bid)===-1){
+    var best=allowed[0],bd=99;
+    allowed.forEach(function(v){ if(Math.abs(v-bid)<bd){bd=Math.abs(v-bid);best=v;} });
+    bid=best;
+  }
+  return bid;
+}
+function placeBid(p,b){
+  G.bids[p]=b;
+  G.turn=(G.turn+1)%G.n;
+  hideBidUI();
+  renderGame();
+  stepBidding();
+}
+function showBidUI(){
+  var el=document.getElementById("gbid"); el.style.display="block";
+  var allowed=bidChoices(0);
+  var label = (G.forehead) ? "Forehead card \u2014 bid without seeing yours!" :
+              (G.variant==="misere") ? "Mis\u00e8re \u2014 aim for 0" :
+              (G.variant==="blind") ? "Blind bid \u2014 cards hidden!" : "Your bid";
+  var html="<div class='gbid-label'>"+label+"</div><div class='gbid-btns'>";
+  allowed.forEach(function(v){ html+="<button onclick='placeBid(0,"+v+")'>"+v+"</button>"; });
+  html+="</div>";
+  el.innerHTML=html;
+}
+function hideBidUI(){ var el=document.getElementById("gbid"); el.style.display="none"; el.innerHTML=""; }
+
+// ---- Trick play ----
+function legalCards(p){
+  var h=G.hands[p];
+  if(G.variant==="anarchy") return h.slice();
+  if(G.trick.length===0) return h.slice();
+  var ledSuit=G.trick[0].card.s;
+  var hasLed=h.some(function(c){return c.s===ledSuit;});
+  if(hasLed) return h.filter(function(c){return c.s===ledSuit;});
+  return h.slice();
+}
+function stepPlay(){
+  if(G.trick.length===G.n){ resolveTrick(); return; }
+  var p=G.turn;
+  if(G.players[p].human){
+    renderGame();
+  }else{
+    var c=botPlay(p);
+    setTimeout(function(){ playCard(p,c); }, 550);
+  }
+}
+function botPlay(p){
+  var legal=legalCards(p);
+  var need = G.bids[p]-G.tricksWon[p];
+  var wantWin = need>0;
+  if(G.variant==="misere"||G.variant==="bidmisere") wantWin=false;
+  var sorted=legal.slice().sort(function(a,b){return cardStrength(a)-cardStrength(b);});
+  if(wantWin){
+    var winners=legal.filter(function(c){ return wouldWin(c,p); });
+    if(winners.length){ winners.sort(function(a,b){return cardStrength(a)-cardStrength(b);}); return winners[0]; }
+    return sorted[0];
+  } else {
+    var losers=legal.filter(function(c){ return !wouldWin(c,p); });
+    if(losers.length){ losers.sort(function(a,b){return cardStrength(b)-cardStrength(a);}); return losers[0]; }
+    return sorted[0];
+  }
+}
+function cardStrength(c){
+  var base=c.r;
+  if(G.trump && c.s===G.trump) base+=100;
+  return base;
+}
+function trickWinnerSoFar(){
+  if(G.trick.length===0) return null;
+  var ledSuit=G.trick[0].card.s;
+  var best=G.trick[0], bestVal=inTrickVal(G.trick[0].card, ledSuit);
+  for(var i=1;i<G.trick.length;i++){
+    var v=inTrickVal(G.trick[i].card, ledSuit);
+    if(v>bestVal){ bestVal=v; best=G.trick[i]; }
+  }
+  return best;
+}
+function inTrickVal(card, ledSuit){
+  if(G.trump && card.s===G.trump) return 200+card.r;
+  if(card.s===ledSuit) return 100+card.r;
+  return card.r;
+}
+function wouldWin(card,p){
+  var ledSuit = G.trick.length? G.trick[0].card.s : card.s;
+  var myVal=inTrickVal(card, ledSuit);
+  for(var i=0;i<G.trick.length;i++){
+    if(inTrickVal(G.trick[i].card, ledSuit)>myVal) return false;
+  }
+  return true;
+}
+function playCard(p,card){
+  // Guard: only accept a play when it's genuinely this player's turn in the play phase,
+  // and we are not mid-transition (locked).
+  if(!G || G.phase!=="play" || G.turn!==p || G.locked) return;
+  // Guard: the card must be legal (follow-suit etc.)
+  var legal=legalCards(p);
+  var ok=legal.some(function(c){return c.s===card.s&&c.r===card.r;});
+  if(!ok) return;
+  var h=G.hands[p];
+  var idx=h.findIndex(function(c){return c.s===card.s&&c.r===card.r;});
+  if(idx<0) return;
+  G.locked=true;              // lock immediately so no second tap can slip through
+  h.splice(idx,1);
+  G.trick.push({player:p, card:card});
+  G.turn=(G.turn+1)%G.n;
+  renderGame();
+  setTimeout(function(){ G.locked=false; stepPlay(); }, 350);
+}
+function resolveTrick(){
+  var w=trickWinnerSoFar();
+  G.tricksWon[w.player]++;
+  G.lastTrickWinner=w.player;
+  G.locked=true;              // lock while the completed trick is shown
+  renderGame();
+  setTimeout(function(){
+    G.trick=[];
+    G.turn=w.player;
+    G.leader=w.player;
+    G.locked=false;
+    if(G.hands.every(function(hh){return hh.length===0;})){
+      endRound();
+    } else {
+      renderGame();
+      stepPlay();
+    }
+  }, 900);
+}
+
+// ---- Scoring a round ----
+function roundScore(bid, won, variant){
+  if(variant==="misere") return -won*state.miserePer;
+  if(variant==="bidmisere") return won===0?0:-won*state.miserePer;
+  if(bid===won) return state.bonus + won*state.perTrick;
+  return state.miss;
+}
+function endRound(){
+  var deltas=[];
+  for(var p=0;p<G.n;p++){
+    var d=roundScore(G.bids[p], G.tricksWon[p], G.variant);
+    deltas.push(d);
+    G.players[p].score+=d;
+  }
+  G.lastDeltas=deltas;
+  G.phase="roundover";
+  renderGame();
+}
+function nextRound(){
+  G.roundIdx++;
+  G.dealer=(G.dealer+1)%G.n;
+  // Reached the end of the current sequence?
+  if(G.roundIdx>=G.seq.length){
+    if(!G.descending){
+      // just finished the 7 up-rounds -> enter the repeating bonus stage
+      G.inBonusStage=true;
+      beginRound();     // will open the bonus menu
+      return;
+    } else {
+      G.phase="gameover"; renderGame(); return;
+    }
+  }
+  beginRound();
+}
+
+// ---- Rendering ----
+function renderGame(){
+  if(!G) return;
+  // center trump
+  var tEl=document.getElementById("gtrump");
+  if(G.trumpHidden){
+    tEl.innerHTML="<div class='trumpwrap'><div class='deckcard'></div><div class='trumplabel'>trump hidden</div></div>";
+  } else if(G.trumpCard){
+    var tc=G.trumpCard, redc=SUIT_RED[tc.s]?'red':'blk';
+    tEl.innerHTML="<div class='trumpwrap'>"+
+      "<div class='deckcard'></div>"+
+      "<div class='turncard "+redc+"'><span class='tc-r'>"+rankLabel(tc.r)+"</span><span class='tc-s'>"+SUIT_SYM[tc.s]+"</span></div>"+
+      "<div class='trumplabel'>trump</div></div>";
+  } else if(G.trump){
+    tEl.innerHTML="Trump: <span class='"+(SUIT_RED[G.trump]?'red':'blk')+"'>"+SUIT_SYM[G.trump]+"</span>";
+  } else {
+    tEl.innerHTML="<div class='trumplabel'>no trump</div>";
+  }
+  var vName = G.variant && VARIANTS[G.variant] ? " \u2013 "+VARIANTS[G.variant].name : "";
+  document.getElementById("groundinfo").innerHTML =
+    "Round "+(G.roundIdx+1)+"/"+G.seq.length+" \u00b7 "+G.cards+" card"+(G.cards>1?"s":"")+vName;
+  renderSeats();
+  renderMsg();
+  renderHand();
+}
+
+// place each player at a seat around the oval; you (player 0) at the bottom.
+function seatPositions(n){
+  var pos=[];
+  pos[0]={x:50,y:82}; // you, lower area inside oval
+  var others=n-1;
+  for(var i=1;i<=others;i++){
+    var frac=(others===1)?0.5:(i-1)/(others-1);   // 0..1 left to right
+    // spread across the top from left to right
+    var x=16 + frac*68;                            // 16%..84%
+    var y=(others===1)?18 : (22 - Math.sin(frac*Math.PI)*8); // arch: middle higher
+    pos[i]={x:x, y:y};
+  }
+  return pos;
+}
+function renderSeats(){
+  var wrap=document.getElementById("seats"); if(!wrap) return;
+  var pos=seatPositions(G.n);
+  var html="";
+  for(var p=0;p<G.n;p++){
+    var pl=G.players[p];
+    var active = (G.phase==="bidding"||G.phase==="play") && G.turn===p;
+    var isDealer=(p===G.dealer);
+    var bidTxt = G.bids && G.bids[p]!=null ? G.bids[p] : "\u2013";
+    var wonTxt = G.tricksWon?G.tricksWon[p]:0;
+    var status="";
+    if(G.bids && G.bids[p]!=null && (G.phase==="play"||G.phase==="roundover")){
+      if(G.variant==="misere"||G.variant==="bidmisere") status=wonTxt>0?"over":"ok";
+      else { if(wonTxt>G.bids[p]) status="over"; else if(wonTxt===G.bids[p]) status="ok"; }
+    }
+    var wb="";
+    if(G.bids && G.bids[p]!=null){
+      if(G.phase==="play"||G.phase==="roundover")
+        wb="<div class='seat-wb "+(status==='over'?'bt-over':status==='ok'?'bt-ok':'')+"'>"+wonTxt+" / "+bidTxt+"</div>";
+      else if(G.phase==="bidding")
+        wb="<div class='seat-wb'>bid "+bidTxt+"</div>";
+    }
+    // played card in front of this seat
+    var pc="";
+    var played=null;
+    if(G.trick) for(var t=0;t<G.trick.length;t++){ if(G.trick[t].player===p) played=G.trick[t].card; }
+    if(played){
+      pc="<div class='seatcard "+(SUIT_RED[played.s]?'red':'blk')+"'>"+
+        "<span class='sc-r'>"+rankLabel(played.r)+"</span><span class='sc-s'>"+SUIT_SYM[played.s]+"</span></div>";
+    } else {
+      pc=foreheadSeatCard(p); // forehead round shows others' cards here
+    }
+    // round-over: pop each player's delta at their seat
+    var pop="";
+    if(G.phase==="roundover" && G.lastDeltas){
+      var d=G.lastDeltas[p];
+      pop="<div class='seat-pop "+(d>=0?'pos':'neg')+"'>"+(d>=0?"+":"")+d+"</div>";
+    }
+    html+="<div class='seat"+(active?" turn":"")+(pl.human?" me":"")+"' style='left:"+pos[p].x+"%;top:"+pos[p].y+"%;'>"+
+      pop+
+      "<div class='seat-badges'>"+(isDealer?"<span class='badge-d'>D</span>":"")+(active?"<span class='badge-turn'>\u25B6</span>":"")+"</div>"+
+      "<div class='seat-name'>"+escapeHtml(pl.name)+"</div>"+
+      "<div class='seat-score'>"+pl.score+"</div>"+
+      wb+
+      "<div class='seat-cardslot'>"+pc+"</div>"+
+    "</div>";
+  }
+  wrap.innerHTML=html;
+}
+function foreheadSeatCard(p){
+  if(!G.forehead || G.phase!=="bidding") return "";
+  if(!G.hands || !G.hands[p] || !G.hands[p].length) return "";
+  if(G.players[p].human) return "<div class='seatcard back'></div>";
+  var c=G.hands[p][0];
+  return "<div class='seatcard "+(SUIT_RED[c.s]?'red':'blk')+"'>"+
+    "<span class='sc-r'>"+rankLabel(c.r)+"</span><span class='sc-s'>"+SUIT_SYM[c.s]+"</span></div>";
+}
+function renderMsg(){
+  var el=document.getElementById("gmsg");
+  if(G.phase==="roundover"){
+    var vlabel = G.variant && VARIANTS[G.variant] ? VARIANTS[G.variant].name : "";
+    var rows=G.players.map(function(pl,p){
+      var d=G.lastDeltas[p];
+      return "<tr><td class='ro-nm'>"+escapeHtml(pl.name)+"</td>"+
+        "<td class='ro-wb'>"+G.tricksWon[p]+"/"+G.bids[p]+"</td>"+
+        "<td class='ro-d "+(d>=0?'pos':'neg')+"'>"+(d>=0?"+":"")+d+"</td>"+
+        "<td class='ro-tot'>"+pl.score+"</td></tr>";
+    }).join("");
+    el.innerHTML="<div class='roundover'>"+
+      "<h3>Round "+(G.roundIdx+1)+" over"+(vlabel?" \u00b7 "+vlabel:"")+"</h3>"+
+      "<table class='ro-table'><thead><tr><th></th><th>won/bid</th><th>pts</th><th>total</th></tr></thead>"+
+      "<tbody>"+rows+"</tbody></table>"+
+      "<button class='gbtn primary' onclick='nextRound()'>Next round</button></div>";
+  } else if(G.phase==="gameover"){
+    var sorted=G.players.slice().sort(function(a,b){return b.score-a.score;});
+    var win=sorted[0];
+    var rows2=sorted.map(function(pl,i){
+      return "<tr><td class='ro-nm'>"+(i+1)+". "+escapeHtml(pl.name)+"</td>"+
+        "<td class='ro-tot "+(pl.score>=0?'pos':'neg')+"'>"+pl.score+"</td></tr>";
+    }).join("");
+    el.innerHTML="<div class='roundover'><h3>\uD83C\uDFC6 "+escapeHtml(win.name)+" wins!</h3>"+
+      "<table class='ro-table'><tbody>"+rows2+"</tbody></table>"+
+      "<button class='gbtn primary' onclick='quitGameToSetup()'>New game</button></div>";
+  } else {
+    // live turn banner
+    if(G.phase==="play"){
+      if(G.turn===0 && !G.locked){
+        el.innerHTML="<div class='turnbanner you'>&#9660; Your turn &mdash; tap a highlighted card to play</div>";
+      } else {
+        var who = G.locked ? "Playing\u2026" : escapeHtml(G.players[G.turn].name)+" is playing\u2026";
+        el.innerHTML="<div class='turnbanner'>"+who+"</div>";
+      }
+    } else if(G.phase==="bidding"){
+      if(G.turn===0){
+        el.innerHTML="<div class='turnbanner you'>&#9660; Your turn to bid</div>";
+      } else {
+        el.innerHTML="<div class='turnbanner'>"+escapeHtml(G.players[G.turn].name)+" is bidding\u2026</div>";
+      }
+    } else {
+      el.innerHTML="";
+    }
+  }
+}
+function quitGameToSetup(){
+  G=null;
+  document.getElementById("game-play").style.display="none";
+  document.getElementById("game-setup").style.display="block";
+  renderSetup();
+}
+function renderHand(){
+  var el=document.getElementById("ghand");
+  if(!G || !G.hands){ el.innerHTML=""; return; }
+  var h=G.hands[0];
+  var hideOwn = (G.variant==="blind" && G.phase==="bidding");
+  if(hideOwn){
+    el.innerHTML="<div class='handblind'>Cards hidden until you bid (Blind round)</div>";
+    return;
+  }
+  if(G.forehead && G.phase==="bidding"){
+    el.innerHTML="<div class='handblind'><div class='fh-card back' style='margin:0 auto 8px'></div>Your card is on your forehead \u2014 you can see everyone else's but not your own. Bid, then it flips up.</div>";
+    return;
+  }
+  var canPlay = (G.phase==="play" && G.turn===0 && !G.locked);
+  var legal = canPlay ? legalCards(0) : [];
+  var html="";
+  h.forEach(function(c){
+    var isLegal = canPlay && legal.some(function(x){return x.s===c.s&&x.r===c.r;});
+    var cls="hcard "+(SUIT_RED[c.s]?'red':'blk');
+    if(canPlay && !isLegal) cls+=" disabled";
+    if(isLegal) cls+=" playable";
+    var onclick = isLegal ? "onclick='playCard(0,{s:\""+c.s+"\",r:"+c.r+"})'" : "";
+    html+="<button class='"+cls+"' "+onclick+"><span class='hc-r'>"+rankLabel(c.r)+"</span><span class='hc-s'>"+SUIT_SYM[c.s]+"</span></button>";
+  });
+  el.innerHTML=html;
+}
+
+// ---- Page navigation ----
+function showPage(name){
+  var pages=["score","rules","play"];
+  pages.forEach(function(p){
+    var pg=document.getElementById("page-"+p);
+    var nb=document.getElementById("nav-"+p);
+    if(pg) pg.style.display = (p===name)?"block":"none";
+    if(nb) nb.classList.toggle("active", p===name);
+  });
+  if(name==="play" && !G){ renderSetup(); }
+  window.scrollTo(0,0);
+}
+
+// Show any startup error on screen instead of failing to a blank page (helps on mobile Safari)
+window.addEventListener("error", function(ev){
+  var b=document.getElementById("errbox");
+  if(b){ b.style.display="block"; b.textContent="Error: "+(ev.message||ev.error||"unknown")+"  ["+(ev.filename||"")+":"+(ev.lineno||"")+"]"; }
+});
+try{
+  load(); render();
+}catch(e){
+  var b=document.getElementById("errbox");
+  if(b){ b.style.display="block"; b.textContent="Startup error: "+(e&&e.message?e.message:e); }
+}
 </script>
 </body>
 </html>
