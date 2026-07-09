@@ -1,3 +1,2 @@
 # clagg
 Clagg scoring sheet
-.
