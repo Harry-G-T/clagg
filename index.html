@@ -208,6 +208,10 @@
   .results{max-width:520px;margin:0 auto;padding:0 4px;}
   .results h2{font-family:Georgia,serif;color:var(--gold);font-size:22px;margin:8px 0 4px;text-align:center;}
   .reslead{text-align:center;color:rgba(244,239,227,.6);font-size:13px;margin:0 0 20px;}
+  .lgexplain{background:rgba(217,176,106,.07);border:1px solid rgba(217,176,106,.2);border-radius:10px;padding:11px 13px;margin:12px 0 0;}
+  .lgexplain p{font-size:12.5px;line-height:1.55;color:rgba(244,239,227,.75);margin:0;}
+  .lgexplain b{color:var(--gold);font-weight:700;}
+  .lgexplain .mono{font-family:monospace;font-size:12px;color:rgba(217,176,106,.9);white-space:nowrap;}
   .rescard{display:flex;align-items:center;gap:12px;text-decoration:none;
     background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:14px;
     padding:18px 18px;margin:0 0 13px;color:var(--cream);transition:border-color .15s,background .15s;}
@@ -216,6 +220,16 @@
   .resdate{font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--cream);flex:1;}
   .reswin{font-size:14px;color:var(--gold);font-weight:700;}
   .resarrow{font-size:26px;color:var(--gold);margin-left:6px;}
+  /* League table */
+  .league{margin:0 0 8px;background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
+  .lgrow{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid rgba(244,239,227,.08);}
+  .lgrow:last-child{border-bottom:none;}
+  .lgtop{background:rgba(217,176,106,.12);}
+  .lgpos{width:30px;text-align:center;font-size:20px;}
+  .lgnum{font-size:15px;font-weight:800;color:rgba(244,239,227,.5);}
+  .lgname{flex:1;font-size:17px;font-weight:700;font-family:Georgia,serif;text-transform:capitalize;}
+  .lggames{font-size:12px;color:rgba(244,239,227,.5);}
+  .lgavg{font-size:20px;font-weight:800;color:var(--gold);font-variant-numeric:tabular-nums;min-width:44px;text-align:right;}
   /* Pages + bottom nav */
   .page{padding-bottom:70px;}
   .bottomnav{
@@ -384,23 +398,20 @@
 <!-- ==================== PAGE 0: HOME / LANDING ==================== -->
 <div id="page-home" class="page">
   <div class="landing">
-    <p class="landsub">What would you like to do?</p>
     <button class="landbtn" onclick="showPage('score')">
       <span class="landicon">&#9776;</span>
       <span class="landtext"><b>Score Sheet</b><small>Keep score for a live game</small></span>
     </button>
-    <button class="landbtn" onclick="showPage('results')">
-      <span class="landicon">&#127942;</span>
-      <span class="landtext"><b>Results</b><small>Past games &amp; write-ups</small></span>
-    </button>
   </div>
-</div>
 
-<!-- ==================== PAGE: RESULTS ==================== -->
-<div id="page-results" class="page" style="display:none;">
   <div class="results">
-    <h2>Past games</h2>
-    <p class="reslead">Tap a game to open its full record and analysis.</p>
+    <div id="league-list" class="league"></div>
+    <div class="lgexplain">
+      <p>Ranked on <b>where you finish</b>, not scores &mdash; scores swing with player count and bonus rounds, but a win's a win. Each game: <b>win = 10, last = 1</b>, scaled to the field by <span class="mono">10 &minus; (place &minus; 1) / (players &minus; 1) &times; 9</span>. Your rank is the <b>average</b> of those, so a smaller game still counts and missing one never hurts.</p>
+    </div>
+
+    <h2 style="margin-top:26px;">Past games</h2>
+    <p class="reslead">Tap a game for the full record and analysis.</p>
     <div id="results-list"></div>
   </div>
 </div>
@@ -457,9 +468,8 @@
 
 <!-- ==================== BOTTOM NAV ==================== -->
 <nav class="bottomnav">
-  <button class="navbtn" id="nav-home" onclick="showPage('home')"><span class="navicon">&#8962;</span>Home</button>
-  <button class="navbtn active" id="nav-score" onclick="showPage('score')"><span class="navicon">&#9776;</span>Score Sheet</button>
-  <button class="navbtn" id="nav-results" onclick="showPage('results')"><span class="navicon">&#127942;</span>Results</button>
+  <button class="navbtn active" id="nav-home" onclick="showPage('home')"><span class="navicon">&#8962;</span>Home</button>
+  <button class="navbtn" id="nav-score" onclick="showPage('score')"><span class="navicon">&#9776;</span>Score Sheet</button>
 </nav>
 
 
@@ -1431,32 +1441,81 @@ function renderHand(){
 
 // ---- Page navigation ----
 // Past games — edit this list to add games (they live as HTML pages on GitHub).
+// finishers = final standings in order, best first: [name, score].
 var RESULTS = [
-  { date:"18 July 2026", winner:"frank", score:175, url:"https://harry-g-t.github.io/clagg/clagg-game-report-20260718.html" },
-  { date:"17 July 2026", winner:"frank", score:173, url:"https://harry-g-t.github.io/clagg/clagg-game-report-20260717.html" }
+  { date:"18 July 2026", url:"https://harry-g-t.github.io/clagg/clagg-game-report-20260718.html",
+    finishers:[["frank",175],["john",169],["flash",138],["oli",116],["haz",112],["pete",100]] },
+  { date:"17 July 2026", url:"https://harry-g-t.github.io/clagg/clagg-game-report-20260717.html",
+    finishers:[["frank",173],["flash",150],["haz",148],["john",148],["oli",147],["pete",138]] }
 ];
+
+// Fair league — PLACEMENT ONLY (never score). Each finish is scored 10 (win) down to
+// 1 (last), scaled evenly for the field size so a win is worth 10 whether 4, 5, 6 or 8
+// played, and last is worth 1 either way. Ties share the averaged placement. Players are
+// ranked by AVERAGE across games played, so missing games never helps or hurts. Highest wins.
+function placementScore(pos,n){
+  if(n<=1) return 10;
+  return 10 - (pos-1)/(n-1)*9;   // pos 1 -> 10, pos n -> 1
+}
+function computeLeague(){
+  var tally={};
+  RESULTS.forEach(function(g){
+    var f=g.finishers, n=f.length, i=0;
+    while(i<n){
+      var j=i; while(j+1<n && f[j+1][1]===f[i][1]) j++;      // tie group
+      var avgPos=((i+1)+(j+1))/2;
+      var sc=placementScore(avgPos,n);
+      for(var k=i;k<=j;k++){
+        var name=f[k][0];
+        if(!tally[name]) tally[name]={pts:0,games:0};
+        tally[name].pts+=sc; tally[name].games++;
+      }
+      i=j+1;
+    }
+  });
+  var rows=Object.keys(tally).map(function(name){
+    var t=tally[name]; return {name:name,games:t.games,avg:t.pts/t.games};
+  });
+  rows.sort(function(a,b){ return b.avg-a.avg; });           // highest first
+  return rows;
+}
+function renderLeague(){
+  var el=document.getElementById("league-list");
+  if(!el) return;
+  var rows=computeLeague();
+  var medal=["\uD83E\uDD47","\uD83E\uDD48","\uD83E\uDD49"];
+  el.innerHTML = rows.map(function(r,i){
+    var badge = i<3 ? medal[i] : '<span class="lgnum">'+(i+1)+'</span>';
+    return '<div class="lgrow'+(i===0?' lgtop':'')+'">'
+      + '<span class="lgpos">'+badge+'</span>'
+      + '<span class="lgname">'+r.name+'</span>'
+      + '<span class="lggames">'+r.games+' game'+(r.games>1?'s':'')+'</span>'
+      + '<span class="lgavg">'+r.avg.toFixed(1)+'</span></div>';
+  }).join("");
+}
 function renderResults(){
   var el=document.getElementById("results-list");
   if(!el) return;
   el.innerHTML = RESULTS.map(function(g){
+    var win=g.finishers[0];
     return '<a class="rescard" href="'+g.url+'" target="_blank" rel="noopener">'
       + '<div class="resdate">'+g.date+'</div>'
-      + '<div class="reswin">&#127942; '+g.winner+' &middot; '+g.score+'</div>'
+      + '<div class="reswin">&#127942; '+win[0]+' &middot; '+win[1]+'</div>'
       + '<div class="resarrow">&rsaquo;</div></a>';
   }).join("");
+  renderLeague();
 }
 function showPage(name){
-  var pages=["home","score","results"];
+  var pages=["home","score"];
   pages.forEach(function(p){
     var pg=document.getElementById("page-"+p);
     var nb=document.getElementById("nav-"+p);
     if(pg) pg.style.display = (p===name)?"block":"none";
     if(nb) nb.classList.toggle("active", p===name);
   });
-  // settings gear only relevant on the score sheet
   var sb=document.getElementById("settings-btn");
   if(sb) sb.style.display = (name==="score")?"":"none";
-  if(name==="results") renderResults();
+  if(name==="home") renderResults();
   window.scrollTo(0,0);
 }
 
