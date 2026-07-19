@@ -1,2 +1,1 @@
-# clagg
-Clagg scoring sheet
+# clag
