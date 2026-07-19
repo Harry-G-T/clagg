@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0f3d2e">
-<title>Clagg Scorer</title>
+<title>Clag Scorer</title>
 <style>
   :root{
     --felt:#0f3d2e;
@@ -212,14 +212,23 @@
   .lgexplain p{font-size:12.5px;line-height:1.55;color:rgba(244,239,227,.75);margin:0;}
   .lgexplain b{color:var(--gold);font-weight:700;}
   .lgexplain .mono{font-family:monospace;font-size:12px;color:rgba(217,176,106,.9);white-space:nowrap;}
-  .rescard{display:flex;align-items:center;gap:12px;text-decoration:none;
+  .rescard{display:flex;align-items:stretch;gap:0;
     background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:14px;
-    padding:18px 18px;margin:0 0 13px;color:var(--cream);transition:border-color .15s,background .15s;}
-  .rescard:hover{border-color:var(--gold);background:rgba(217,176,106,.10);}
-  .rescard:active{transform:scale(.99);}
+    margin:0 0 13px;overflow:hidden;transition:border-color .15s;}
+  .rescard:hover{border-color:var(--gold);}
+  .resmain{display:flex;align-items:center;gap:12px;flex:1;text-decoration:none;
+    color:var(--cream);padding:18px 18px;transition:background .15s;}
+  .resmain:hover{background:rgba(217,176,106,.10);}
+  .resmain:active{transform:scale(.99);}
   .resdate{font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--cream);flex:1;}
   .reswin{font-size:14px;color:var(--gold);font-weight:700;}
   .resarrow{font-size:26px;color:var(--gold);margin-left:6px;}
+  .rescsv{display:flex;align-items:center;justify-content:center;text-decoration:none;
+    padding:0 16px;font-size:13px;font-weight:700;color:var(--gold);
+    border-left:1px solid var(--line);background:rgba(217,176,106,.06);white-space:nowrap;
+    transition:background .15s;}
+  .rescsv:hover{background:rgba(217,176,106,.18);}
+  .rescsv:active{transform:scale(.97);}
   /* League table */
   .league{margin:0 0 8px;background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
   .lgrow{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid rgba(244,239,227,.08);}
@@ -390,7 +399,7 @@
 <body>
 
 <header>
-  <h1 onclick="showPage('home')" style="cursor:pointer">Clagg <span class="suit"><span class="blk">&spades;</span><span class="red">&hearts;</span><span class="blk">&clubs;</span><span class="red">&diams;</span></span> <span class="ver">v37</span></h1>
+  <h1 onclick="showPage('home')" style="cursor:pointer">Clag <span class="suit"><span class="blk">&spades;</span><span class="red">&hearts;</span><span class="blk">&clubs;</span><span class="red">&diams;</span></span> <span class="ver">v37</span></h1>
   <button class="settings-btn" id="settings-btn" onclick="openSheet()">&#9881; Settings</button>
 </header>
 <div id="errbox" style="display:none;background:#c0392b;color:#fff;padding:10px 12px;border-radius:8px;margin-bottom:12px;font-family:monospace;font-size:13px;word-break:break-word;"></div>
@@ -435,7 +444,7 @@
 <div id="page-rules" class="page" style="display:none;">
   <div class="rules">
     <h2>How to play</h2>
-    <p class="lead">Clagg (widely known as Oh Hell, and also as Oh Pshaw, Blackout, Bust or Nomination Whist) is a trick-taking game for 3&ndash;7 players, best with 4&ndash;6. Everyone plays for themselves. The whole point is to win <em>exactly</em> the number of tricks you bid &mdash; no more, no fewer.</p>
+    <p class="lead">Clag (widely known as Oh Hell, and also as Oh Pshaw, Blackout, Bust or Nomination Whist) is a trick-taking game for 3&ndash;7 players, best with 4&ndash;6. Everyone plays for themselves. The whole point is to win <em>exactly</em> the number of tricks you bid &mdash; no more, no fewer.</p>
 
     <h3>The deal</h3>
     <p>A standard 52-card deck is used, ranking high to low: A K Q J 10 9 8 7 6 5 4 3 2. The number of cards dealt changes every hand. A common pattern counts down then back up &mdash; for example 7, 6, 5, 4, 3, 2, 1, then 2, 3, 4, 5, 6, 7 &mdash; so the trick count each round equals the number of cards in your hand. After dealing, the next card is turned face up; its suit is <strong>trump</strong> for that hand and beats all other suits.</p>
@@ -452,7 +461,7 @@
     <p>The player with the highest score at the end of all the hands wins.</p>
 
     <h3>Bonus rounds</h3>
-    <p>Clagg is often spiced up with special rounds. The scorecard's <strong>&#9733; Bonus</strong> button lets you add any of these:</p>
+    <p>Clag is often spiced up with special rounds. The scorecard's <strong>&#9733; Bonus</strong> button lets you add any of these:</p>
     <p><em>Mis&egrave;re</em> &mdash; the goal flips: avoid tricks entirely. You lose points for every trick you're forced to win (5 per trick by default).</p>
     <p><em>Bid mis&egrave;re</em> &mdash; you actively declare mis&egrave;re. Win no tricks and you're safe (zero); take even one and you pay the penalty per trick.</p>
     <p><em>Bid</em> &mdash; trump is auctioned rather than turned up: players bid for it and the highest bidder chooses trump. If bids tie, the earliest bidder wins it. Play then scores as normal.</p>
@@ -462,7 +471,7 @@
     <p><em>Forehead (1-card rounds)</em> &mdash; in the first and last hands, when only one card is dealt, you hold it to your forehead: you can see everyone else's card but not your own. You bid on that basis, then all cards flip up for the single trick.</p>
     <p><em>Ascending madness</em> &mdash; tricks are worth escalating points: the 1st trick 2, the 2nd 4, the 3rd 6, and so on. <em>Descending madness</em> reverses it: the 1st trick is worth twice the hand size, counting down to 2 for the last. You still bid for the normal 10-point bonus &mdash; unless combined with mis&egrave;re, where everyone aims for zero. Because the score depends on <em>which</em> tricks you win, you enter these round scores by hand on the card.</p>
 
-    <p class="credit">Rules summarised from Wikipedia's "Oh hell" article and Pagat.com, adapted to the way Clagg is commonly played. See <span class="mono">en.wikipedia.org/wiki/Oh_hell</span> and <span class="mono">pagat.com/exact/ohhell.html</span> for full detail and history.</p>
+    <p class="credit">Rules summarised from Wikipedia's "Oh hell" article and Pagat.com, adapted to the way Clag is commonly played. See <span class="mono">en.wikipedia.org/wiki/Oh_hell</span> and <span class="mono">pagat.com/exact/ohhell.html</span> for full detail and history.</p>
   </div>
 </div>
 
@@ -1443,9 +1452,11 @@ function renderHand(){
 // Past games — edit this list to add games (they live as HTML pages on GitHub).
 // finishers = final standings in order, best first: [name, score].
 var RESULTS = [
-  { date:"18 July 2026", url:"https://harry-g-t.github.io/clagg/clagg-game-report-20260718.html",
+  { date:"18 July 2026", url:"https://harry-g-t.github.io/clagg/clag-game-report-20260718.html",
+    csv:"https://harry-g-t.github.io/clagg/clag-scores-20260718.csv",
     finishers:[["frank",175],["john",169],["flash",138],["oli",116],["haz",112],["pete",100]] },
-  { date:"17 July 2026", url:"https://harry-g-t.github.io/clagg/clagg-game-report-20260717.html",
+  { date:"17 July 2026", url:"https://harry-g-t.github.io/clagg/clag-game-report-20260717.html",
+    csv:"https://harry-g-t.github.io/clagg/clag-scores-20260717.csv",
     finishers:[["frank",173],["flash",150],["haz",148],["john",148],["oli",147],["pete",138]] }
 ];
 
@@ -1498,10 +1509,16 @@ function renderResults(){
   if(!el) return;
   el.innerHTML = RESULTS.map(function(g){
     var win=g.finishers[0];
-    return '<a class="rescard" href="'+g.url+'" target="_blank" rel="noopener">'
+    var csvBtn = g.csv
+      ? '<a class="rescsv" href="'+g.csv+'" download onclick="event.stopPropagation()" title="Download CSV">&#8595; CSV</a>'
+      : '';
+    return '<div class="rescard">'
+      + '<a class="resmain" href="'+g.url+'" target="_blank" rel="noopener">'
       + '<div class="resdate">'+g.date+'</div>'
       + '<div class="reswin">&#127942; '+win[0]+' &middot; '+win[1]+'</div>'
-      + '<div class="resarrow">&rsaquo;</div></a>';
+      + '<div class="resarrow">&rsaquo;</div></a>'
+      + csvBtn
+      + '</div>';
   }).join("");
   renderLeague();
 }
