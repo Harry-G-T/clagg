@@ -50,20 +50,23 @@
   }
   .board th,.board td{padding:10px 3px;text-align:center;border-right:1px solid rgba(244,239,227,.10);}
   .board th:last-child,.board td:last-child{border-right:none;}
+  /* Sticky player-name header: stays visible while scrolling long games */
   .board thead th{
     background:var(--felt-lo);font-weight:700;font-size:14px;
     border-bottom:2px solid var(--gold);padding:10px 3px;
+    position:sticky;top:0;z-index:20;
   }
+  .board thead th:first-child,.board thead th:nth-child(2){z-index:21;}
   .board tbody td{border-bottom:1px solid rgba(244,239,227,.08);}
   .board thead th:first-child{text-align:left;padding-left:8px;width:70px;font-size:12px;color:var(--gold);}
-  .cell{display:flex;flex-direction:column;gap:5px;align-items:center;width:150px;margin:0 auto;}
-  .cell .inputs{display:flex;gap:2px;align-items:center;border-radius:9px;padding:2px;justify-content:center;}
+  .cell{display:flex;flex-direction:column;gap:6px;align-items:center;width:174px;margin:0 auto;}
+  .cell .inputs{display:flex;gap:3px;align-items:center;border-radius:10px;padding:2px;justify-content:center;}
   .cell .inputs.made{background:rgba(95,185,138,.28);}
   .cell .inputs.missed{background:rgba(192,57,43,.28);}
   .cell input{
-    width:46px;background:rgba(244,239,227,.06);border:1px solid var(--line);
-    color:var(--cream);font-family:inherit;font-size:22px;font-weight:700;text-align:center;
-    border-radius:8px;padding:8px 0;
+    width:54px;background:rgba(244,239,227,.06);border:1px solid var(--line);
+    color:var(--cream);font-family:inherit;font-size:24px;font-weight:700;text-align:center;
+    border-radius:9px;padding:12px 0;
   }
   .cell input:focus{outline:none;border-color:var(--gold);background:rgba(217,176,106,.12);}
   .cell input::placeholder{color:rgba(244,239,227,.28);font-weight:400;font-size:15px;}
@@ -188,6 +191,31 @@
   .danger{width:100%;margin-top:10px;background:transparent;color:var(--red);
     border:1px solid var(--red);border-radius:10px;padding:12px;font-family:inherit;font-size:14px;}
   .hint{font-size:12px;color:rgba(244,239,227,.55);text-align:center;margin:8px 0 0;line-height:1.5;}
+  /* Landing page */
+  .landing{max-width:440px;margin:24px auto 0;padding:0 4px;}
+  .landsub{text-align:center;color:rgba(244,239,227,.6);font-size:15px;margin:0 0 22px;}
+  .landbtn{display:flex;align-items:center;gap:16px;width:100%;margin:0 0 16px;
+    background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:16px;
+    padding:22px 20px;color:var(--cream);font-family:inherit;cursor:pointer;
+    text-align:left;transition:border-color .15s,background .15s;}
+  .landbtn:hover{border-color:var(--gold);background:rgba(217,176,106,.10);}
+  .landbtn:active{transform:scale(.99);}
+  .landicon{font-size:34px;line-height:1;width:44px;text-align:center;color:var(--gold);}
+  .landtext{display:flex;flex-direction:column;gap:3px;}
+  .landtext b{font-size:20px;font-family:Georgia,serif;color:var(--gold);}
+  .landtext small{font-size:13px;color:rgba(244,239,227,.6);}
+  /* Results page */
+  .results{max-width:520px;margin:0 auto;padding:0 4px;}
+  .results h2{font-family:Georgia,serif;color:var(--gold);font-size:22px;margin:8px 0 4px;text-align:center;}
+  .reslead{text-align:center;color:rgba(244,239,227,.6);font-size:13px;margin:0 0 20px;}
+  .rescard{display:flex;align-items:center;gap:12px;text-decoration:none;
+    background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:14px;
+    padding:18px 18px;margin:0 0 13px;color:var(--cream);transition:border-color .15s,background .15s;}
+  .rescard:hover{border-color:var(--gold);background:rgba(217,176,106,.10);}
+  .rescard:active{transform:scale(.99);}
+  .resdate{font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--cream);flex:1;}
+  .reswin{font-size:14px;color:var(--gold);font-weight:700;}
+  .resarrow{font-size:26px;color:var(--gold);margin-left:6px;}
   /* Pages + bottom nav */
   .page{padding-bottom:70px;}
   .bottomnav{
@@ -348,13 +376,37 @@
 <body>
 
 <header>
-  <h1>Clagg <span class="suit"><span class="blk">&spades;</span><span class="red">&hearts;</span><span class="blk">&clubs;</span><span class="red">&diams;</span></span> <span class="ver">v36</span></h1>
-  <button class="settings-btn" onclick="openSheet()">&#9881; Settings</button>
+  <h1 onclick="showPage('home')" style="cursor:pointer">Clagg <span class="suit"><span class="blk">&spades;</span><span class="red">&hearts;</span><span class="blk">&clubs;</span><span class="red">&diams;</span></span> <span class="ver">v37</span></h1>
+  <button class="settings-btn" id="settings-btn" onclick="openSheet()">&#9881; Settings</button>
 </header>
 <div id="errbox" style="display:none;background:#c0392b;color:#fff;padding:10px 12px;border-radius:8px;margin-bottom:12px;font-family:monospace;font-size:13px;word-break:break-word;"></div>
 
+<!-- ==================== PAGE 0: HOME / LANDING ==================== -->
+<div id="page-home" class="page">
+  <div class="landing">
+    <p class="landsub">What would you like to do?</p>
+    <button class="landbtn" onclick="showPage('score')">
+      <span class="landicon">&#9776;</span>
+      <span class="landtext"><b>Score Sheet</b><small>Keep score for a live game</small></span>
+    </button>
+    <button class="landbtn" onclick="showPage('results')">
+      <span class="landicon">&#127942;</span>
+      <span class="landtext"><b>Results</b><small>Past games &amp; write-ups</small></span>
+    </button>
+  </div>
+</div>
+
+<!-- ==================== PAGE: RESULTS ==================== -->
+<div id="page-results" class="page" style="display:none;">
+  <div class="results">
+    <h2>Past games</h2>
+    <p class="reslead">Tap a game to open its full record and analysis.</p>
+    <div id="results-list"></div>
+  </div>
+</div>
+
 <!-- ==================== PAGE 1: SCORECARD ==================== -->
-<div id="page-score" class="page">
+<div id="page-score" class="page" style="display:none;">
 <table class="board">
   <thead><tr id="head-row"></tr></thead>
   <tbody id="rows"></tbody>
@@ -403,50 +455,11 @@
   </div>
 </div>
 
-<!-- ==================== PAGE 3: PLAY ==================== -->
-<div id="page-play" class="page" style="display:none;">
-  <div id="game-root">
-    <!-- Setup screen -->
-    <div id="game-setup" class="gsetup">
-      <h2>Play Clagg</h2>
-      <p class="lead">You versus simple bots. Deal runs 1&rarr;7, bonus rounds of 7 you choose, then 6&rarr;1.</p>
-      <label class="glabel">Players (including you)</label>
-      <div class="gcount" id="gcount"></div>
-      <label class="glabel">Start from</label>
-      <div class="gstart" id="gstart"></div>
-      <label class="glabel">Your name</label>
-      <input id="gname" class="ginput" value="You" maxlength="12">
-      <button class="gbtn primary" onclick="startGame()">Deal first hand</button>
-      <p class="ghint" id="gsetup-note"></p>
-    </div>
-
-    <!-- Game screen -->
-    <div id="game-play" style="display:none;">
-      <div class="gtop">
-        <div class="ground" id="groundinfo"></div>
-        <button class="gmenu" onclick="quitGame()">Quit</button>
-      </div>
-      <div class="gtablearea" id="gtablearea">
-        <div class="oval">
-          <div class="ovalcenter" id="ovalcenter">
-            <div class="gtrump" id="gtrump"></div>
-          </div>
-          <div id="seats"></div>
-        </div>
-      </div>
-      <div class="gmsg" id="gmsg"></div>
-      <div class="gbid" id="gbid" style="display:none;"></div>
-      <div class="ghand" id="ghand"></div>
-    </div>
-  </div>
-</div>
-
-
 <!-- ==================== BOTTOM NAV ==================== -->
 <nav class="bottomnav">
-  <button class="navbtn active" id="nav-score" onclick="showPage('score')"><span class="navicon">&#9776;</span>Scorecard</button>
-  <button class="navbtn" id="nav-rules" onclick="showPage('rules')"><span class="navicon">&#9432;</span>Rules</button>
-  <button class="navbtn" id="nav-play" onclick="showPage('play')"><span class="navicon">&spades;</span>Play</button>
+  <button class="navbtn" id="nav-home" onclick="showPage('home')"><span class="navicon">&#8962;</span>Home</button>
+  <button class="navbtn active" id="nav-score" onclick="showPage('score')"><span class="navicon">&#9776;</span>Score Sheet</button>
+  <button class="navbtn" id="nav-results" onclick="showPage('results')"><span class="navicon">&#127942;</span>Results</button>
 </nav>
 
 
@@ -683,9 +696,69 @@ function render(){
 
 function escapeHtml(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function cleanNum(val){ let s=val.replace(/[^0-9-]/g,''); s=s.replace(/(?!^)-/g,''); return s; }
-function upd(ri,pi,field,val){ state.rounds[ri].cells[pi][field]=cleanNum(val); render(); }
+function upd(ri,pi,field,val){ state.rounds[ri].cells[pi][field]=cleanNum(val); refreshDerived(); }
 function updLabel(ri,val){ state.rounds[ri].label=val; save(); }
-function updTricks(ri,val){ state.rounds[ri].tricks=cleanNum(val); render(); }
+function updTricks(ri,val){ state.rounds[ri].tricks=cleanNum(val); refreshDerived(); }
+
+/* Recompute totals, tints, check-boxes and score cells WITHOUT tearing down the
+   input the user is typing in. This is what fixes the "pause between digits" bug:
+   a full render() replaced the <input> on every keystroke, dropping fast typing. */
+function refreshDerived(){
+  const n = state.players.length;
+  const running = Array(n).fill(0);
+  const trickList = computeAllTricks();
+  state.rounds.forEach((round,ri)=>{
+    const t = trickList[ri];
+    let bidSum=0, wonSum=0, anyBid=false, anyWon=false;
+    round.cells.forEach((c,pi)=>{
+      const sc = cellScore(c, round);
+      if(sc.has) running[pi]+=sc.val;
+      if(c.bid!==""){ bidSum+=(+c.bid); anyBid=true; }
+      if(c.won!==""){ wonSum+=(+c.won); anyWon=true; }
+      // update the score cell (unless the user is actively editing THAT score input)
+      const scoreEl=document.getElementById(`i-${ri}-${pi}-score`);
+      if(scoreEl && document.activeElement!==scoreEl){
+        const hasRawOverride = c.override!=="";
+        scoreEl.value = hasRawOverride ? c.override : (sc.has ? sc.val : "");
+        scoreEl.className = "runtot " + (hasRawOverride?"override":(sc.has&&sc.val<0?"miss":""));
+      }
+      // made/missed tint on the bid+won pair
+      const inputsEl=document.getElementById(`i-${ri}-${pi}-bid`);
+      if(inputsEl && inputsEl.parentElement){
+        const wrap=inputsEl.parentElement; // .inputs
+        let tint="";
+        if(c.override==="" && c.bid!=="" && c.won!==""){ tint=(+c.bid===+c.won)?"made":"missed"; }
+        wrap.classList.remove("made","missed"); if(tint) wrap.classList.add(tint);
+        // over-cap flags
+        const bidOver = t!==null && c.bid!=="" && (+c.bid)>t;
+        const wonOver = t!==null && c.won!=="" && (+c.won)>t;
+        inputsEl.classList.toggle("over",bidOver);
+        const wonEl=document.getElementById(`i-${ri}-${pi}-won`);
+        if(wonEl) wonEl.classList.toggle("over",wonOver);
+      }
+    });
+    // check boxes
+    const rowEl=document.querySelectorAll("#rows tr")[ri];
+    if(rowEl){
+      const chk=rowEl.querySelectorAll(".chkcell .chkbox");
+      const allBid=round.cells.every(c=>c.bid!=="");
+      const allWon=round.cells.every(c=>c.won!=="");
+      if(chk[0]){
+        let bc="chkbox"; if(t!==null&&anyBid){ if(bidSum===t)bc="chkbox bad"; else if(allBid)bc="chkbox ok"; }
+        chk[0].className=bc; chk[0].innerHTML=anyBid?bidSum:"&middot;";
+      }
+      if(chk[1]){
+        let wc="chkbox"; if(t!==null&&anyWon){ if(allWon)wc=wonSum===t?"chkbox ok":"chkbox bad"; else if(wonSum>t)wc="chkbox bad"; }
+        chk[1].className=wc; chk[1].innerHTML=anyWon?wonSum:"&middot;";
+      }
+    }
+  });
+  // totals row
+  const tot=document.getElementById("total-row");
+  const max=Math.max(...running);
+  tot.innerHTML="<td>TOTAL</td><td></td>"+running.map(v=>`<td class="${v===max&&max!==0?'lead':''}">${v}</td>`).join("")+"<td></td><td></td><td></td>";
+  save();
+}
 function renameP(i,val){ state.players[i]=val||("P"+(i+1)); save(); }
 function overrideRound(ri,pi,val){
   const c=state.rounds[ri].cells[pi];
@@ -694,7 +767,7 @@ function overrideRound(ri,pi,val){
   const auto=autoScore(c, state.rounds[ri]);
   if(s!=="" && s!=="-" && !isNaN(+s) && auto!==null && (+s)===auto){ c.override=""; }
   else { c.override = s; }
-  render();
+  refreshDerived();
 }
 function addRound(type){ state.rounds.push(newRound(state.players.length,type)); render();
   window.scrollTo(0,document.body.scrollHeight); }
@@ -1357,15 +1430,33 @@ function renderHand(){
 }
 
 // ---- Page navigation ----
+// Past games — edit this list to add games (they live as HTML pages on GitHub).
+var RESULTS = [
+  { date:"18 July 2026", winner:"frank", score:175, url:"https://harry-g-t.github.io/clagg/clagg-game-report-20260718.html" },
+  { date:"17 July 2026", winner:"frank", score:173, url:"https://harry-g-t.github.io/clagg/clagg-game-report-20260717.html" }
+];
+function renderResults(){
+  var el=document.getElementById("results-list");
+  if(!el) return;
+  el.innerHTML = RESULTS.map(function(g){
+    return '<a class="rescard" href="'+g.url+'" target="_blank" rel="noopener">'
+      + '<div class="resdate">'+g.date+'</div>'
+      + '<div class="reswin">&#127942; '+g.winner+' &middot; '+g.score+'</div>'
+      + '<div class="resarrow">&rsaquo;</div></a>';
+  }).join("");
+}
 function showPage(name){
-  var pages=["score","rules","play"];
+  var pages=["home","score","results"];
   pages.forEach(function(p){
     var pg=document.getElementById("page-"+p);
     var nb=document.getElementById("nav-"+p);
     if(pg) pg.style.display = (p===name)?"block":"none";
     if(nb) nb.classList.toggle("active", p===name);
   });
-  if(name==="play" && !G){ renderSetup(); }
+  // settings gear only relevant on the score sheet
+  var sb=document.getElementById("settings-btn");
+  if(sb) sb.style.display = (name==="score")?"":"none";
+  if(name==="results") renderResults();
   window.scrollTo(0,0);
 }
 
@@ -1376,6 +1467,7 @@ window.addEventListener("error", function(ev){
 });
 try{
   load(); render();
+  showPage("home");
 }catch(e){
   var b=document.getElementById("errbox");
   if(b){ b.style.display="block"; b.textContent="Startup error: "+(e&&e.message?e.message:e); }
